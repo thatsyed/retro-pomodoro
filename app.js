@@ -288,7 +288,7 @@ function initAudioContext() {
 
 // Play Quick Mechanical Button Click
 function triggerClickSound() {
-  if (!appState.settings.soundEnabled) return;
+  if (!appState.settings.soundEnabled || appState.settings.volume <= 0.001) return;
   try {
     initAudioContext();
     const osc = audioCtx.createOscillator();
@@ -299,13 +299,18 @@ function triggerClickSound() {
     osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.05);
     
     gain.gain.setValueAtTime(appState.settings.volume * 0.2, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.05);
     
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     
     osc.start();
     osc.stop(audioCtx.currentTime + 0.05);
+    
+    osc.onended = () => {
+      osc.disconnect();
+      gain.disconnect();
+    };
   } catch (e) {
     console.error('Audio play failed:', e);
   }
@@ -313,7 +318,7 @@ function triggerClickSound() {
 
 // Play Upbeat Work/Relax Break Completion Alert
 function triggerCompletionAlert() {
-  if (!appState.settings.soundEnabled) return;
+  if (!appState.settings.soundEnabled || appState.settings.volume <= 0.001) return;
   try {
     initAudioContext();
     const now = audioCtx.currentTime;
@@ -342,11 +347,16 @@ function playNote(freq, startTime, duration, waveType) {
   osc.frequency.value = freq;
   
   gain.gain.setValueAtTime(appState.settings.volume * 0.4, startTime);
-  gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+  gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
   
   osc.connect(gain);
   gain.connect(audioCtx.destination);
   
   osc.start(startTime);
   osc.stop(startTime + duration);
+  
+  osc.onended = () => {
+    osc.disconnect();
+    gain.disconnect();
+  };
 }
