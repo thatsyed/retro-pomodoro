@@ -327,17 +327,17 @@ function triggerClickSound() {
     const gain = audioCtx.createGain();
     
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.05);
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.08);
     
-    gain.gain.setValueAtTime(appState.settings.volume * 2.0, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.05);
+    gain.gain.setValueAtTime(appState.settings.volume * 1.5, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
     
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     
     osc.start();
-    osc.stop(audioCtx.currentTime + 0.05);
+    osc.stop(audioCtx.currentTime + 0.08);
     
     osc.onended = () => {
       osc.disconnect();
@@ -361,10 +361,10 @@ function triggerCompletionAlert() {
       playNote(659.25, now + 0.1, 0.1, 'square');  // E5
       playNote(783.99, now + 0.2, 0.25, 'square'); // G5
     } else {
-      // Completed BREAK (Trigger relaxing bell melody: G4 -> E4 -> C4)
-      playNote(392.00, now, 0.15, 'triangle');     // G4
-      playNote(329.63, now + 0.15, 0.15, 'triangle'); // E4
-      playNote(261.63, now + 0.3, 0.35, 'triangle');  // C4
+      // Completed BREAK (Trigger relaxing bell melody: G5 -> E5 -> C5)
+      playNote(783.99, now, 0.15, 'triangle');     // G5
+      playNote(659.25, now + 0.15, 0.15, 'triangle'); // E5
+      playNote(523.25, now + 0.3, 0.35, 'triangle');  // C5
     }
   } catch (e) {
     console.error('Completion alert audio failed:', e);
@@ -378,8 +378,8 @@ function playNote(freq, startTime, duration, waveType) {
   osc.type = waveType;
   osc.frequency.value = freq;
   
-  gain.gain.setValueAtTime(appState.settings.volume * 2.5, startTime);
-  gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+  gain.gain.setValueAtTime(appState.settings.volume * 1.5, startTime);
+  gain.gain.linearRampToValueAtTime(0.001, startTime + duration);
   
   osc.connect(gain);
   gain.connect(audioCtx.destination);
