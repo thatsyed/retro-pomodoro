@@ -313,9 +313,14 @@ function initAudioContext() {
   }
 }
 
+let lastClickTime = 0;
+
 // Play Quick Mechanical Button Click
 function triggerClickSound() {
   if (!appState.settings.soundEnabled || appState.settings.volume <= 0.001) return;
+  const now = Date.now();
+  if (now - lastClickTime < 150) return;
+  lastClickTime = now;
   try {
     initAudioContext();
     const osc = audioCtx.createOscillator();
