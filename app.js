@@ -251,6 +251,7 @@ function openSettings() {
 
 function closeSettings() {
   settingsModal.classList.remove('show');
+  loadSettings();
 }
 
 // Listeners Setup
