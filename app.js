@@ -30,7 +30,7 @@ const DEFAULT_SETTINGS = {
   shortBreakDuration: 5,
   longBreakDuration: 15,
   soundEnabled: true,
-  volume: 1.0
+  volume: 0.6
 };
 
 let appState = {
