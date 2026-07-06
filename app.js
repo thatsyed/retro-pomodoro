@@ -6,6 +6,7 @@ const modeLongBtn = document.getElementById('mode-long');
 const timeDisplay = document.getElementById('time-display');
 const cozySprite = document.getElementById('cozy-sprite');
 const tallyDotsContainer = document.getElementById('tally-dots');
+const tallyCount = document.getElementById('tally-count');
 const startBtn = document.getElementById('btn-start');
 const pauseBtn = document.getElementById('btn-pause');
 const resetBtn = document.getElementById('btn-reset');
@@ -14,6 +15,7 @@ const modalCloseBtn = document.getElementById('btn-modal-close');
 const modalSaveBtn = document.getElementById('btn-settings-save');
 const modalDefaultBtn = document.getElementById('btn-settings-default');
 const settingsModal = document.getElementById('settings-modal');
+const steamGroup = document.querySelector('.steam-group');
 
 // Numerical / Modal settings selectors
 const inputWork = document.getElementById('input-work');
@@ -67,9 +69,9 @@ function loadSettings() {
 }
 
 function saveSettings() {
-  const workVal = parseInt(inputWork.value);
-  const shortVal = parseInt(inputShort.value);
-  const longVal = parseInt(inputLong.value);
+  const workVal = parseInt(inputWork.value, 10);
+  const shortVal = parseInt(inputShort.value, 10);
+  const longVal = parseInt(inputLong.value, 10);
   
   appState.settings.workDuration = isNaN(workVal) 
     ? DEFAULT_SETTINGS.workDuration 
@@ -124,16 +126,23 @@ function updateDisplay() {
   }
   
   // Steam Floating speed based on running state
-  const steamGroup = document.querySelector('.steam-group');
-  if (appState.timerState === 'running' && appState.currentMode === 'work') {
-    steamGroup.style.display = 'block';
-    cozySprite.classList.add('active');
-  } else if (appState.timerState === 'running' && appState.currentMode !== 'work') {
-    steamGroup.style.display = 'none'; // Cozy idle/sleeping during breaks
-    cozySprite.classList.add('active');
+  if (steamGroup) {
+    if (appState.timerState === 'running' && appState.currentMode === 'work') {
+      steamGroup.style.display = 'block';
+      cozySprite.classList.add('active');
+    } else if (appState.timerState === 'running' && appState.currentMode !== 'work') {
+      steamGroup.style.display = 'none'; // Cozy idle/sleeping during breaks
+      cozySprite.classList.add('active');
+    } else {
+      steamGroup.style.display = 'none';
+      cozySprite.classList.remove('active');
+    }
   } else {
-    steamGroup.style.display = 'none';
-    cozySprite.classList.remove('active');
+    if (appState.timerState === 'running') {
+      cozySprite.classList.add('active');
+    } else {
+      cozySprite.classList.remove('active');
+    }
   }
 }
 
@@ -189,6 +198,9 @@ function resetTimer() {
 
 function updateTallyDots() {
   tallyDotsContainer.innerHTML = '';
+  if (tallyCount) {
+    tallyCount.textContent = appState.completedSessions;
+  }
   // Determine how many dots to fill: 
   // If completedSessions is 0, fill 0.
   // Otherwise, fill (completedSessions - 1) % 4 + 1.
@@ -252,6 +264,20 @@ resetBtn.addEventListener('click', () => { triggerClickSound(); resetTimer(); })
 
 settingsBtn.addEventListener('click', () => { triggerClickSound(); openSettings(); });
 modalCloseBtn.addEventListener('click', () => { triggerClickSound(); closeSettings(); });
+
+// Close settings when clicking on modal background overlay
+settingsModal.addEventListener('click', (e) => {
+  if (e.target === settingsModal) {
+    triggerClickSound();
+    closeSettings();
+  }
+});
+
+// Sound Volume Live Preview
+inputVolume.addEventListener('input', () => {
+  appState.settings.volume = parseFloat(inputVolume.value);
+  triggerClickSound();
+});
 
 modalSaveBtn.addEventListener('click', () => {
   triggerClickSound();

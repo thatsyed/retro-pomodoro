@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cozy Retro Pomodoro is an offline-ready, 8-bit styled study timer designed to enhance focus.">
   <title>Cozy Pomodoro - Retro Study Timer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,7 +55,7 @@
 
         <!-- Session Status -->
         <div class="session-tally" id="session-tally">
-          <span class="tally-label">SESSIONS:</span>
+          <span class="tally-label">SESSIONS: <span id="tally-count">0</span></span>
           <div class="tally-dots" id="tally-dots"></div>
         </div>
       </div>
@@ -68,7 +69,7 @@
 
       <!-- Utility / Settings Access -->
       <div class="console-footer">
-        <button id="btn-settings" class="retro-icon-btn">⚙️ SETTINGS</button>
+        <button id="btn-settings" class="retro-icon-btn" aria-label="Open settings">⚙️ SETTINGS</button>
       </div>
     </div>
   </div>
@@ -78,7 +79,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2>SETTINGS</h2>
-        <button id="btn-modal-close" class="close-btn">&times;</button>
+        <button id="btn-modal-close" class="close-btn" aria-label="Close settings">&times;</button>
       </div>
       <div class="modal-body">
         <div class="setting-group">

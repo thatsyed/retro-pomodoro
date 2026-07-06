@@ -35,7 +35,8 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 /* Wallpaper Grid Background */
@@ -342,6 +343,8 @@ body {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 .settings-modal.show {
@@ -357,6 +360,7 @@ body {
   width: 90%;
   max-width: 360px;
   padding: 20px;
+  margin: auto;
   transform: scale(0.8);
   transition: transform 0.3s ease;
 }
