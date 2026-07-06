@@ -436,3 +436,28 @@ body {
   padding-top: 16px;
   margin-top: 16px;
 }
+
+@media (max-width: 480px) {
+  .console-widget {
+    padding: 16px;
+    gap: 16px;
+  }
+  .console-title {
+    font-size: 1.5rem;
+  }
+  .time-display {
+    font-size: 4rem;
+  }
+  .retro-btn {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+  .mode-tabs {
+    padding-bottom: 4px;
+  }
+  .tab-btn {
+    font-size: 0.8rem;
+    padding: 2px 6px;
+  }
+}
+
