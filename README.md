@@ -26,4 +26,5 @@ A retro-themed Pomodoro timer styled to look like an 8-bit handheld console or d
 - **Long Break**: A longer recovery period (typically 15 minutes) taken after completing a set of four consecutive work sessions to fully recharge.
 - **Session Indicators**: Tracking tallies (styled as pixel coffee mugs) that represent your completed work cycles before the next long break.
 
+
 Made with 🩷 by Owais.
