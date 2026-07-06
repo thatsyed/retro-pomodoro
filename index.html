@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cozy Pomodoro - Retro Study Timer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="wallpaper-grid"></div>
+  <div class="app-container">
+    <div class="console-widget">
+      <!-- Header -->
+      <div class="console-header">
+        <span class="indicator-led" id="led-indicator"></span>
+        <h1 class="console-title">COZY POMODORO</h1>
+      </div>
+
+      <!-- Screen Display -->
+      <div class="console-screen">
+        <!-- Tabs / Modes -->
+        <div class="mode-tabs">
+          <button id="mode-work" class="tab-btn active">WORK</button>
+          <button id="mode-short" class="tab-btn">SHORT</button>
+          <button id="mode-long" class="tab-btn">LONG</button>
+        </div>
+
+        <!-- Clock Display -->
+        <div class="time-display" id="time-display">25:00</div>
+
+        <!-- Cozy Interactive Sprite -->
+        <div class="sprite-area">
+          <div class="cozy-sprite" id="cozy-sprite">
+            <!-- Steaming Mug SVG -->
+            <svg viewBox="0 0 64 64" class="mug-svg">
+              <!-- Animated Steam Bubbles -->
+              <g class="steam-group">
+                <rect x="24" y="8" width="4" height="8" fill="#ebd8b7" class="steam-particle steam-1" />
+                <rect x="36" y="4" width="4" height="8" fill="#ebd8b7" class="steam-particle steam-2" />
+                <rect x="28" y="12" width="4" height="8" fill="#ebd8b7" class="steam-particle steam-3" />
+              </g>
+              <!-- Mug Body -->
+              <path d="M16 28 h32 v24 a 8 8 0 0 1 -8 8 h-16 a 8 8 0 0 1 -8 -8 z" fill="#c26f63" stroke="#4d312c" stroke-width="4" />
+              <path d="M48 36 h6 a 4 4 0 0 1 4 4 v8 a 4 4 0 0 1 -4 4 h-6" fill="none" stroke="#4d312c" stroke-width="4" />
+              <!-- Liquid top line -->
+              <line x1="18" y1="32" x2="46" y2="32" stroke="#ebd8b7" stroke-width="4" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Session Status -->
+        <div class="session-tally" id="session-tally">
+          <span class="tally-label">SESSIONS:</span>
+          <div class="tally-dots" id="tally-dots"></div>
+        </div>
+      </div>
+
+      <!-- Controls Panel -->
+      <div class="console-controls">
+        <button id="btn-start" class="retro-btn btn-primary">START</button>
+        <button id="btn-pause" class="retro-btn btn-warning">PAUSE</button>
+        <button id="btn-reset" class="retro-btn btn-danger">RESET</button>
+      </div>
+
+      <!-- Utility / Settings Access -->
+      <div class="console-footer">
+        <button id="btn-settings" class="retro-icon-btn">⚙️ SETTINGS</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal (Hidden by default) -->
+  <div class="settings-modal" id="settings-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>SETTINGS</h2>
+        <button id="btn-modal-close" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-group">
+          <label for="input-work">WORK (MIN):</label>
+          <input type="number" id="input-work" min="1" max="60" value="25">
+        </div>
+        <div class="setting-group">
+          <label for="input-short">SHORT BREAK (MIN):</label>
+          <input type="number" id="input-short" min="1" max="30" value="5">
+        </div>
+        <div class="setting-group">
+          <label for="input-long">LONG BREAK (MIN):</label>
+          <input type="number" id="input-long" min="1" max="60" value="15">
+        </div>
+        <div class="setting-group checkbox-group">
+          <label for="toggle-sound">SOUNDS:</label>
+          <input type="checkbox" id="toggle-sound" checked>
+        </div>
+        <div class="setting-group">
+          <label for="input-volume">VOLUME:</label>
+          <input type="range" id="input-volume" min="0" max="1" step="0.1" value="0.5">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-settings-save" class="retro-btn btn-primary">SAVE</button>
+        <button id="btn-settings-default" class="retro-btn btn-danger">DEFAULTS</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
