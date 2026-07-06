@@ -30,7 +30,7 @@ const DEFAULT_SETTINGS = {
   shortBreakDuration: 5,
   longBreakDuration: 15,
   soundEnabled: true,
-  volume: 0.8
+  volume: 1.0
 };
 
 let appState = {
@@ -330,7 +330,7 @@ function triggerClickSound() {
     osc.frequency.setValueAtTime(150, audioCtx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.05);
     
-    gain.gain.setValueAtTime(appState.settings.volume * 0.8, audioCtx.currentTime);
+    gain.gain.setValueAtTime(appState.settings.volume * 2.0, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.05);
     
     osc.connect(gain);
@@ -378,7 +378,7 @@ function playNote(freq, startTime, duration, waveType) {
   osc.type = waveType;
   osc.frequency.value = freq;
   
-  gain.gain.setValueAtTime(appState.settings.volume * 1.0, startTime);
+  gain.gain.setValueAtTime(appState.settings.volume * 2.5, startTime);
   gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
   
   osc.connect(gain);
