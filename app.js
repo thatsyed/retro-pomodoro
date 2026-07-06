@@ -275,6 +275,78 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTallyDots();
 });
 
-// Placeholder functions for audio triggers (to be implemented in Task 4)
-function triggerClickSound() {}
-function triggerCompletionAlert() {}
+let audioCtx = null;
+
+function initAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+// Play Quick Mechanical Button Click
+function triggerClickSound() {
+  if (!appState.settings.soundEnabled) return;
+  try {
+    initAudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.05);
+    
+    gain.gain.setValueAtTime(appState.settings.volume * 0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+  } catch (e) {
+    console.error('Audio play failed:', e);
+  }
+}
+
+// Play Upbeat Work/Relax Break Completion Alert
+function triggerCompletionAlert() {
+  if (!appState.settings.soundEnabled) return;
+  try {
+    initAudioContext();
+    const now = audioCtx.currentTime;
+    
+    if (appState.currentMode === 'shortBreak' || appState.currentMode === 'longBreak') {
+      // Completed WORK (Trigger upbeat NES melody: C5 -> E5 -> G5)
+      playNote(523.25, now, 0.1, 'square');      // C5
+      playNote(659.25, now + 0.1, 0.1, 'square');  // E5
+      playNote(783.99, now + 0.2, 0.25, 'square'); // G5
+    } else {
+      // Completed BREAK (Trigger relaxing bell melody: G4 -> E4 -> C4)
+      playNote(392.00, now, 0.15, 'triangle');     // G4
+      playNote(329.63, now + 0.15, 0.15, 'triangle'); // E4
+      playNote(261.63, now + 0.3, 0.35, 'triangle');  // C4
+    }
+  } catch (e) {
+    console.error('Completion alert audio failed:', e);
+  }
+}
+
+function playNote(freq, startTime, duration, waveType) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  
+  osc.type = waveType;
+  osc.frequency.value = freq;
+  
+  gain.gain.setValueAtTime(appState.settings.volume * 0.4, startTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+  
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  
+  osc.start(startTime);
+  osc.stop(startTime + duration);
+}
