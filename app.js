@@ -46,7 +46,7 @@ let timerInterval = null;
 
 // Initialize Settings
 function loadSettings() {
-  const saved = localStorage.getItem('cozy_pomodoro_settings');
+  const saved = localStorage.getItem('retro_pomodoro_settings');
   if (saved) {
     try {
       appState.settings = JSON.parse(saved);
@@ -92,7 +92,7 @@ function saveSettings() {
     ? DEFAULT_SETTINGS.volume 
     : Math.max(0, Math.min(1, volumeVal));
   
-  localStorage.setItem('cozy_pomodoro_settings', JSON.stringify(appState.settings));
+  localStorage.setItem('retro_pomodoro_settings', JSON.stringify(appState.settings));
 }
 
 function updateDurationFromMode() {
