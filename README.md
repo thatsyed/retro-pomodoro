@@ -1,5 +1,7 @@
 # Cozy Retro Pomodoro
 
+![Cozy Retro Pomodoro](https://images2.imgbox.com/7b/ca/XXHAyRVF_o.png)
+
 ## Description
 A cozy, retro-themed Pomodoro timer styled to look like an 8-bit handheld console or desktop widget. It features warm, earthy tones, interactive pixel-art details (like a steaming coffee mug cozy sprite), and programmatically synthesized retro chimes. The app is completely self-contained, runs offline, and uses precise system-time delta checking to keep perfectly accurate sessions without drifting when the browser tab runs in the background.
 
