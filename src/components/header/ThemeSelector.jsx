@@ -4,11 +4,11 @@ import { soundSynth } from '../../services/soundSynth';
 
 export function ThemeSelector({ currentTheme, onThemeChange }) {
   const themes = [
-    { id: 'cyberpunk', name: 'Cyberpunk Neon', color: '#00ffcc' },
-    { id: 'amber', name: 'Amber Phosphor', color: '#ffb000' },
-    { id: 'matrix', name: 'Matrix Emerald', color: '#33ff66' },
-    { id: 'synthwave', name: 'Synthwave Dark', color: '#e0aaff' },
-    { id: 'classic', name: 'Vintage Warm', color: '#e6c280' },
+    { id: 'cyberpunk', name: 'Cyberpunk' },
+    { id: 'amber', name: 'Amber' },
+    { id: 'matrix', name: 'Matrix' },
+    { id: 'synthwave', name: 'Synthwave' },
+    { id: 'classic', name: 'Classic' },
   ];
 
   const handleSelect = (e) => {
@@ -22,7 +22,7 @@ export function ThemeSelector({ currentTheme, onThemeChange }) {
       <select
         value={currentTheme}
         onChange={handleSelect}
-        className="bg-transparent text-[10px] font-mono text-[var(--text-primary)] focus:outline-none cursor-pointer uppercase tracking-wider"
+        className="bg-transparent text-[10px] font-mono text-[var(--text-primary)] focus:outline-none cursor-pointer tracking-wider"
       >
         {themes.map((t) => (
           <option key={t.id} value={t.id} className="bg-[var(--bg-deck)] text-[var(--text-primary)]">

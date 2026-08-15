@@ -1,5 +1,5 @@
 import React from 'react';
-import { Terminal, Settings, Keyboard, Sparkles } from 'lucide-react';
+import { Terminal, Settings, Keyboard } from 'lucide-react';
 import { ThemeSelector } from './ThemeSelector';
 import { CrtToggle } from './CrtToggle';
 import { soundSynth } from '../../services/soundSynth';
@@ -31,10 +31,10 @@ export function HeaderBar({
         </div>
         <div>
           <h1 className="font-pixel text-xs sm:text-sm text-[var(--text-primary)] glow-text tracking-wider">
-            RETRO POMODORO // v2.0
+            Retro Pomodoro
           </h1>
           <p className="font-mono text-[9px] text-[var(--text-dim)] uppercase tracking-widest">
-            8-BIT FOCUS WORKSTATION
+            Focus console
           </p>
         </div>
       </div>
@@ -52,7 +52,7 @@ export function HeaderBar({
           type="button"
           onClick={handleOpenShortcuts}
           className="p-1.5 bg-[var(--bg-app)] border border-[var(--border-color)] text-[var(--text-dim)] hover:text-[var(--text-primary)] hover:border-[var(--text-primary)] transition-all cursor-pointer"
-          title="Keyboard Shortcuts Cheat-sheet [Alt + K]"
+          title="Shortcuts [Alt + K]"
         >
           <Keyboard className="w-4 h-4" />
         </button>
@@ -62,7 +62,7 @@ export function HeaderBar({
           type="button"
           onClick={handleOpenSettings}
           className="p-1.5 bg-[var(--bg-app)] border border-[var(--border-color)] text-[var(--text-dim)] hover:text-[var(--text-primary)] hover:border-[var(--text-primary)] transition-all cursor-pointer"
-          title="System Settings"
+          title="Settings"
         >
           <Settings className="w-4 h-4" />
         </button>
