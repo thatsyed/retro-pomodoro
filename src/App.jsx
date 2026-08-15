@@ -72,28 +72,6 @@ export function App() {
   // 6. Screen Wake Lock
   useWakeLock(timer.isRunning || audioEngine.isAudioPlaying);
 
-  // Handlers
-  const handleSelectTheme = (newTheme) => {
-    audioEngine.triggerClick();
-    setSettings((prev) => ({ ...prev, theme: newTheme }));
-  };
-
-  const handleSelectSprite = (spriteId) => {
-    audioEngine.triggerClick();
-    setSettings((prev) => ({ ...prev, activeSprite: spriteId }));
-  };
-
-  const handleApplyPreset = (work, short, long) => {
-    audioEngine.triggerClick();
-    setSettings((prev) => ({
-      ...prev,
-      workDuration: work,
-      shortBreakDuration: short,
-      longBreakDuration: long || prev.longBreakDuration
-    }));
-    timer.resetTimer();
-  };
-
   // Keyboard Shortcuts Handler
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -150,10 +128,9 @@ export function App() {
 
       {/* Top Station Hardware Header */}
       <StationHeader
-        theme={settings?.theme || 'classic'}
-        onSelectTheme={handleSelectTheme}
         todayPomos={stats?.todayPomos || 0}
         todayFocusMinutes={stats?.todayFocusMinutes || 0}
+        dailyGoal={settings?.dailyGoal || 8}
         zenMode={zenMode}
         onToggleZenMode={() => {
           audioEngine.triggerClick();
@@ -170,7 +147,11 @@ export function App() {
       />
 
       {/* Mobile Deck Navigation Tabs (visible only on mobile) */}
-      <nav className="flex md:hidden bg-[var(--color-chassis)] border-2 border-[var(--color-border)] rounded-[var(--btn-radius)] p-1 gap-1" role="tablist" aria-label="Workstation Decks">
+      <nav
+        className="flex md:hidden bg-[var(--color-chassis)] border-2 border-[var(--color-border)] rounded-[var(--btn-radius)] p-1 gap-1 shadow-[0_2px_0_var(--color-btn-shadow)]"
+        role="tablist"
+        aria-label="Workstation Decks"
+      >
         <button
           role="tab"
           aria-selected={mobileTab === 'deck-timer'}
@@ -178,13 +159,13 @@ export function App() {
             audioEngine.triggerClick();
             setMobileTab('deck-timer');
           }}
-          className={`flex-1 font-mono text-xs font-bold py-2 px-1 rounded-xs text-center transition-colors ${
+          className={`flex-1 font-mono text-xs font-bold py-2 px-1 rounded-[var(--btn-radius)] text-center transition-all cursor-pointer ${
             mobileTab === 'deck-timer'
-              ? 'bg-[var(--color-screen-bg)] text-[var(--color-screen-glow)]'
-              : 'text-[var(--color-border)]'
+              ? 'bg-[var(--color-screen-bg)] text-[var(--color-screen-glow)] border border-[var(--color-border)] shadow-inner'
+              : 'text-[var(--color-border)] opacity-70 hover:opacity-100 hover:bg-black/5'
           }`}
         >
-          ⏱️ TIMER
+          ⏱ TIMER
         </button>
         <button
           role="tab"
@@ -193,13 +174,13 @@ export function App() {
             audioEngine.triggerClick();
             setMobileTab('deck-tasks');
           }}
-          className={`flex-1 font-mono text-xs font-bold py-2 px-1 rounded-xs text-center transition-colors ${
+          className={`flex-1 font-mono text-xs font-bold py-2 px-1 rounded-[var(--btn-radius)] text-center transition-all cursor-pointer ${
             mobileTab === 'deck-tasks'
-              ? 'bg-[var(--color-screen-bg)] text-[var(--color-screen-glow)]'
-              : 'text-[var(--color-border)]'
+              ? 'bg-[var(--color-screen-bg)] text-[var(--color-screen-glow)] border border-[var(--color-border)] shadow-inner'
+              : 'text-[var(--color-border)] opacity-70 hover:opacity-100 hover:bg-black/5'
           }`}
         >
-          📝 TASKS ({taskManager.allTodosCount})
+          📝 TASKS {taskManager.allTodosCount > 0 ? `(${taskManager.allTodosCount})` : ''}
         </button>
         <button
           role="tab"
@@ -208,10 +189,10 @@ export function App() {
             audioEngine.triggerClick();
             setMobileTab('deck-aux');
           }}
-          className={`flex-1 font-mono text-xs font-bold py-2 px-1 rounded-xs text-center transition-colors ${
+          className={`flex-1 font-mono text-xs font-bold py-2 px-1 rounded-[var(--btn-radius)] text-center transition-all cursor-pointer ${
             mobileTab === 'deck-aux'
-              ? 'bg-[var(--color-screen-bg)] text-[var(--color-screen-glow)]'
-              : 'text-[var(--color-border)]'
+              ? 'bg-[var(--color-screen-bg)] text-[var(--color-screen-glow)] border border-[var(--color-border)] shadow-inner'
+              : 'text-[var(--color-border)] opacity-70 hover:opacity-100 hover:bg-black/5'
           }`}
         >
           🎵 AUDIO
@@ -244,7 +225,6 @@ export function App() {
             completedSessions={timer.completedSessions}
             currentClock={alarmManager.currentClock}
             activeSprite={settings?.activeSprite || 'mug'}
-            onSelectSprite={handleSelectSprite}
             onSwitchMode={(mode) => {
               audioEngine.triggerClick();
               timer.switchMode(mode);
@@ -261,8 +241,6 @@ export function App() {
               audioEngine.triggerClick();
               timer.resetTimer();
             }}
-            onApplyPreset={handleApplyPreset}
-            onOpenCustomSettings={() => setIsSettingsOpen(true)}
             dailyGoal={settings?.dailyGoal || 8}
           />
         </div>
@@ -296,17 +274,19 @@ export function App() {
       </main>
 
       {/* Keyboard Shortcuts Legend Footer */}
-      <footer className="keyboard-legend flex flex-col items-center gap-2 p-2 text-[var(--color-screen-text)] opacity-85">
-        <div className="flex justify-center items-center gap-4 flex-wrap text-xs">
-          <span><kbd>SPACE</kbd> START/PAUSE</span>
-          <span><kbd>R</kbd> RESET</span>
-          <span><kbd>Z</kbd> ZEN MODE</span>
-          <span><kbd>W</kbd>/<kbd>S</kbd>/<kbd>L</kbd> MODES</span>
-          <span><kbd>M</kbd> MUSIC</span>
-          <span><kbd>?</kbd> SHORTCUTS</span>
-        </div>
-        <div className="text-[10px] tracking-wider opacity-60">
-          RETRO WORKSTATION v2.0 • BUILT WITH VITE, REACT & TAILWIND
+      <footer className="keyboard-legend flex justify-center items-center py-2 px-4 text-[var(--color-screen-text)] opacity-75 font-mono text-[11px]">
+        <div className="flex justify-center items-center gap-2 sm:gap-3 flex-wrap text-center">
+          <span><kbd>SPACE</kbd> Start/Pause</span>
+          <span className="opacity-40">•</span>
+          <span><kbd>R</kbd> Reset</span>
+          <span className="opacity-40">•</span>
+          <span><kbd>Z</kbd> Zen</span>
+          <span className="opacity-40">•</span>
+          <span><kbd>W/S/L</kbd> Modes</span>
+          <span className="opacity-40">•</span>
+          <span><kbd>M</kbd> Music</span>
+          <span className="opacity-40">•</span>
+          <span><kbd>?</kbd> Shortcuts</span>
         </div>
       </footer>
 
@@ -321,6 +301,10 @@ export function App() {
         }}
         allData={{ settings, todos, alarms, stats }}
         onImportData={handleImportData}
+        alarms={alarmManager.alarms}
+        onAddAlarm={alarmManager.addAlarm}
+        onToggleAlarm={alarmManager.toggleAlarm}
+        onDeleteAlarm={alarmManager.deleteAlarm}
       />
 
       {/* Shortcuts Guide Modal */}
