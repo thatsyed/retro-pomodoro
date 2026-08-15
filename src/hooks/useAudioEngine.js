@@ -8,23 +8,60 @@ import {
   createAmbientGenerator
 } from '../utils/audioSynth';
 
-export function useAudioEngine(settings, saveSettings) {
+export function useAudioEngine(settings) {
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [musicVolume, setMusicVolume] = useState(0.4);
+  const [musicVolume, setMusicVolume] = useState(0.5);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
   const [activeAmbient, setActiveAmbient] = useState(null);
+  const [ambientVolume, setAmbientVolume] = useState(0.4);
 
   const audioRef = useRef(null);
   const ambientGenRef = useRef(null);
 
-  // Initialize background music element
+  // Initialize background audio element
   useEffect(() => {
     const audio = new Audio();
-    audio.loop = true;
+    audio.preload = 'metadata';
+    audio.src = MUSIC_TRACKS[0]?.src || '';
     audio.volume = musicVolume;
     audioRef.current = audio;
 
+    const onTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+    };
+
+    const onLoadedMetadata = () => {
+      setDuration(audio.duration || 0);
+    };
+
+    const onEnded = () => {
+      // Auto-advance to next track in loop
+      setCurrentTrackIndex((prev) => {
+        const nextIndex = (prev + 1) % MUSIC_TRACKS.length;
+        audio.src = MUSIC_TRACKS[nextIndex].src;
+        audio.play().then(() => setIsPlayingMusic(true)).catch(() => setIsPlayingMusic(false));
+        return nextIndex;
+      });
+    };
+
+    const onPlay = () => setIsPlayingMusic(true);
+    const onPause = () => setIsPlayingMusic(false);
+
+    audio.addEventListener('timeupdate', onTimeUpdate);
+    audio.addEventListener('loadedmetadata', onLoadedMetadata);
+    audio.addEventListener('ended', onEnded);
+    audio.addEventListener('play', onPlay);
+    audio.addEventListener('pause', onPause);
+
     return () => {
+      audio.removeEventListener('timeupdate', onTimeUpdate);
+      audio.removeEventListener('loadedmetadata', onLoadedMetadata);
+      audio.removeEventListener('ended', onEnded);
+      audio.removeEventListener('play', onPlay);
+      audio.removeEventListener('pause', onPause);
       audio.pause();
       audio.src = '';
     };
@@ -33,43 +70,50 @@ export function useAudioEngine(settings, saveSettings) {
   // Update volume
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = musicVolume;
+      audioRef.current.volume = isMuted ? 0 : musicVolume;
     }
-  }, [musicVolume]);
+  }, [musicVolume, isMuted]);
 
+  // SFX Triggers
   const triggerClick = useCallback(() => {
-    playClickSound(settings.volume, settings.soundEnabled);
-  }, [settings.volume, settings.soundEnabled]);
+    playClickSound(settings?.volume ?? 0.6, settings?.soundEnabled ?? true);
+  }, [settings?.volume, settings?.soundEnabled]);
 
   const triggerTaskDone = useCallback(() => {
-    playTaskDoneSound(settings.volume, settings.soundEnabled);
-  }, [settings.volume, settings.soundEnabled]);
+    playTaskDoneSound(settings?.volume ?? 0.6, settings?.soundEnabled ?? true);
+  }, [settings?.volume, settings?.soundEnabled]);
 
   const triggerTimerComplete = useCallback((mode) => {
-    playTimerCompleteSound(mode, settings.volume, settings.soundEnabled);
-  }, [settings.volume, settings.soundEnabled]);
+    playTimerCompleteSound(mode, settings?.volume ?? 0.6, settings?.soundEnabled ?? true);
+  }, [settings?.volume, settings?.soundEnabled]);
 
   const triggerAlarmAlert = useCallback(() => {
-    playAlarmChime(settings.volume, settings.soundEnabled);
-  }, [settings.volume, settings.soundEnabled]);
+    playAlarmChime(settings?.volume ?? 0.6, settings?.soundEnabled ?? true);
+  }, [settings?.volume, settings?.soundEnabled]);
 
-  const playMusic = useCallback((index = currentTrackIndex) => {
-    if (!audioRef.current) return;
+  // Track Playback Controls
+  const playTrack = useCallback((index) => {
+    const audio = audioRef.current;
+    if (!audio) return;
     const track = MUSIC_TRACKS[index] || MUSIC_TRACKS[0];
-    setCurrentTrackIndex(index);
-    audioRef.current.src = track.src;
-    audioRef.current.volume = musicVolume;
-    audioRef.current.play().then(() => {
+    
+    if (index !== currentTrackIndex || !audio.src.includes(track.src)) {
+      audio.src = track.src;
+      setCurrentTrackIndex(index);
+    }
+
+    audio.play().then(() => {
       setIsPlayingMusic(true);
     }).catch((err) => {
-      console.warn('Playback requires user interaction', err);
+      console.warn('Playback waiting for user interaction:', err);
       setIsPlayingMusic(false);
     });
-  }, [currentTrackIndex, musicVolume]);
+  }, [currentTrackIndex]);
 
-  const pauseMusic = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
+  const pauseTrack = useCallback(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
       setIsPlayingMusic(false);
     }
   }, []);
@@ -77,21 +121,39 @@ export function useAudioEngine(settings, saveSettings) {
   const toggleMusic = useCallback(() => {
     triggerClick();
     if (isPlayingMusic) {
-      pauseMusic();
+      pauseTrack();
     } else {
-      playMusic(currentTrackIndex);
+      playTrack(currentTrackIndex);
     }
-  }, [isPlayingMusic, playMusic, pauseMusic, currentTrackIndex, triggerClick]);
+  }, [isPlayingMusic, playTrack, pauseTrack, currentTrackIndex, triggerClick]);
 
-  const selectTrack = useCallback((index) => {
+  const nextTrack = useCallback(() => {
     triggerClick();
-    if (index === currentTrackIndex && isPlayingMusic) {
-      pauseMusic();
-    } else {
-      playMusic(index);
-    }
-  }, [currentTrackIndex, isPlayingMusic, playMusic, pauseMusic, triggerClick]);
+    const nextIdx = (currentTrackIndex + 1) % MUSIC_TRACKS.length;
+    playTrack(nextIdx);
+  }, [currentTrackIndex, playTrack, triggerClick]);
 
+  const prevTrack = useCallback(() => {
+    triggerClick();
+    const prevIdx = (currentTrackIndex - 1 + MUSIC_TRACKS.length) % MUSIC_TRACKS.length;
+    playTrack(prevIdx);
+  }, [currentTrackIndex, playTrack, triggerClick]);
+
+  const seek = useCallback((percentage) => {
+    const audio = audioRef.current;
+    if (audio && duration > 0) {
+      const newTime = (percentage / 100) * duration;
+      audio.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  }, [duration]);
+
+  const toggleMute = useCallback(() => {
+    triggerClick();
+    setIsMuted((prev) => !prev);
+  }, [triggerClick]);
+
+  // Ambient Generator Controls
   const toggleAmbient = useCallback((type) => {
     triggerClick();
     if (activeAmbient === type) {
@@ -104,10 +166,10 @@ export function useAudioEngine(settings, saveSettings) {
       if (ambientGenRef.current) {
         ambientGenRef.current.stop();
       }
-      ambientGenRef.current = createAmbientGenerator(type, settings.volume);
+      ambientGenRef.current = createAmbientGenerator(type, (settings?.volume ?? 0.6) * ambientVolume);
       setActiveAmbient(type);
     }
-  }, [activeAmbient, settings.volume, triggerClick]);
+  }, [activeAmbient, settings?.volume, ambientVolume, triggerClick]);
 
   return {
     isPlayingMusic,
@@ -115,10 +177,20 @@ export function useAudioEngine(settings, saveSettings) {
     currentTrack: MUSIC_TRACKS[currentTrackIndex] || MUSIC_TRACKS[0],
     musicVolume,
     setMusicVolume,
-    activeAmbient,
+    currentTime,
+    duration,
+    isMuted,
+    toggleMute,
+    seek,
     toggleMusic,
-    selectTrack,
+    playTrack,
+    pauseTrack,
+    nextTrack,
+    prevTrack,
+    activeAmbient,
     toggleAmbient,
+    ambientVolume,
+    setAmbientVolume,
     triggerClick,
     triggerTaskDone,
     triggerTimerComplete,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StationHeader } from './components/header/StationHeader';
 import { TimerDeck } from './components/timer/TimerDeck';
 import { TaskDeck } from './components/tasks/TaskDeck';
@@ -14,7 +14,6 @@ import { useTaskManager } from './hooks/useTaskManager';
 import { useAlarmManager } from './hooks/useAlarmManager';
 import { useWakeLock } from './hooks/useWakeLock';
 import { DEFAULT_SETTINGS } from './types';
-import { SvgIcon } from './components/common/SvgIcon';
 
 export function App() {
   // 1. Persistent State
@@ -35,13 +34,13 @@ export function App() {
 
   // Apply Theme & Scanlines to document root
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', settings.theme || 'classic');
-    document.body.classList.toggle('no-scanlines', settings.scanlines === false);
+    document.documentElement.setAttribute('data-theme', settings?.theme || 'classic');
+    document.body.classList.toggle('no-scanlines', settings?.scanlines === false);
     document.body.classList.toggle('zen-mode', zenMode);
-  }, [settings.theme, settings.scanlines, zenMode]);
+  }, [settings?.theme, settings?.scanlines, zenMode]);
 
   // 2. Audio Engine
-  const audioEngine = useAudioEngine(settings, setSettings);
+  const audioEngine = useAudioEngine(settings);
 
   // 3. Pomodoro Timer
   const timer = usePomodoroTimer(
@@ -50,7 +49,7 @@ export function App() {
     setStats,
     (completedMode) => audioEngine.triggerTimerComplete(completedMode),
     () => {
-      if (settings.tickingEnabled) audioEngine.triggerClick();
+      if (settings?.tickingEnabled) audioEngine.triggerClick();
     }
   );
 
@@ -151,10 +150,10 @@ export function App() {
 
       {/* Top Station Hardware Header */}
       <StationHeader
-        theme={settings.theme || 'classic'}
+        theme={settings?.theme || 'classic'}
         onSelectTheme={handleSelectTheme}
-        todayPomos={stats.todayPomos || 0}
-        todayFocusMinutes={stats.todayFocusMinutes || 0}
+        todayPomos={stats?.todayPomos || 0}
+        todayFocusMinutes={stats?.todayFocusMinutes || 0}
         zenMode={zenMode}
         onToggleZenMode={() => {
           audioEngine.triggerClick();
@@ -219,7 +218,7 @@ export function App() {
         </button>
       </nav>
 
-      {/* Main 3-Deck Workstation Layout */}
+      {/* Main 3-Deck Workstation Layout: Left = Tasks, Center = Pomodoro Timer, Right = Audio & Alarms */}
       <main className="workstation-container" id="workstation-container">
         {/* LEFT DECK: Task Operations Log */}
         <div className={mobileTab === 'deck-tasks' ? 'block' : 'hidden md:block'}>
@@ -235,8 +234,8 @@ export function App() {
           />
         </div>
 
-        {/* CENTER DECK: Primary Pomodoro Engine */}
-        <div className={mobileTab === 'deck-timer' ? 'block' : 'hidden md:block'}>
+        {/* CENTER DECK: Primary Pomodoro Engine (Main Product) */}
+        <div className={`deck-center-wrapper ${mobileTab === 'deck-timer' ? 'block' : 'hidden md:block'}`}>
           <TimerDeck
             currentMode={timer.currentMode}
             timerState={timer.timerState}
@@ -244,7 +243,7 @@ export function App() {
             strokeDashoffset={timer.strokeDashoffset}
             completedSessions={timer.completedSessions}
             currentClock={alarmManager.currentClock}
-            activeSprite={settings.activeSprite || 'mug'}
+            activeSprite={settings?.activeSprite || 'mug'}
             onSelectSprite={handleSelectSprite}
             onSwitchMode={(mode) => {
               audioEngine.triggerClick();
@@ -264,11 +263,11 @@ export function App() {
             }}
             onApplyPreset={handleApplyPreset}
             onOpenCustomSettings={() => setIsSettingsOpen(true)}
-            dailyGoal={settings.dailyGoal || 8}
+            dailyGoal={settings?.dailyGoal || 8}
           />
         </div>
 
-        {/* RIGHT DECK: Lo-Fi Tape Deck & Alarms */}
+        {/* RIGHT DECK: Audio & Alarms Subsystem */}
         <div className={mobileTab === 'deck-aux' ? 'block' : 'hidden md:block'}>
           <AudioDeck
             isPlayingMusic={audioEngine.isPlayingMusic}
@@ -276,8 +275,15 @@ export function App() {
             currentTrack={audioEngine.currentTrack}
             musicVolume={audioEngine.musicVolume}
             onSetMusicVolume={audioEngine.setMusicVolume}
+            currentTime={audioEngine.currentTime}
+            duration={audioEngine.duration}
+            isMuted={audioEngine.isMuted}
+            onToggleMute={audioEngine.toggleMute}
+            onSeek={audioEngine.seek}
             onToggleMusic={audioEngine.toggleMusic}
-            onSelectTrack={audioEngine.selectTrack}
+            onSelectTrack={audioEngine.playTrack}
+            onNextTrack={audioEngine.nextTrack}
+            onPrevTrack={audioEngine.prevTrack}
             activeAmbient={audioEngine.activeAmbient}
             onToggleAmbient={audioEngine.toggleAmbient}
             alarms={alarmManager.alarms}
@@ -296,6 +302,7 @@ export function App() {
           <span><kbd>R</kbd> RESET</span>
           <span><kbd>Z</kbd> ZEN MODE</span>
           <span><kbd>W</kbd>/<kbd>S</kbd>/<kbd>L</kbd> MODES</span>
+          <span><kbd>M</kbd> MUSIC</span>
           <span><kbd>?</kbd> SHORTCUTS</span>
         </div>
         <div className="text-[10px] tracking-wider opacity-60">
