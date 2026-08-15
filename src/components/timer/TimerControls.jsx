@@ -18,12 +18,12 @@ export function TimerControls({ isRunning, onToggle, onSkip, onReset }) {
         {isRunning ? (
           <>
             <Pause className="w-4 h-4 fill-current stroke-[2.5]" />
-            <span>PAUSE</span>
+            <span>Pause</span>
           </>
         ) : (
           <>
             <Play className="w-4 h-4 fill-current stroke-[2.5]" />
-            <span>START</span>
+            <span>Start</span>
           </>
         )}
       </button>
@@ -36,7 +36,7 @@ export function TimerControls({ isRunning, onToggle, onSkip, onReset }) {
         title="Skip Session [Alt + S]"
       >
         <SkipForward className="w-3.5 h-3.5 stroke-[2.5]" />
-        <span>SKIP</span>
+        <span>Skip</span>
       </button>
 
       {/* Reset Button */}
@@ -47,7 +47,7 @@ export function TimerControls({ isRunning, onToggle, onSkip, onReset }) {
         title="Reset Countdown [Alt + R]"
       >
         <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
-        <span>RESET</span>
+        <span>Reset</span>
       </button>
     </div>
   );

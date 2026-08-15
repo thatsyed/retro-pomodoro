@@ -6,10 +6,10 @@ export function DigitalDisplay({ timeLeft, totalDuration, mode, isRunning, compl
   const progressPercent = Math.min(100, Math.max(0, ((totalDuration - timeLeft) / totalDuration) * 100));
 
   const modeBadge = {
-    work: { text: 'FOCUS SPRINT', color: 'text-[var(--text-primary)] border-[var(--text-primary)]' },
-    shortBreak: { text: 'SHORT BREAK', color: 'text-[var(--text-secondary)] border-[var(--text-secondary)]' },
-    longBreak: { text: 'LONG RECHARGE', color: 'text-[var(--accent)] border-[var(--accent)]' },
-  }[mode] || { text: 'FOCUS', color: 'text-[var(--text-primary)]' };
+    work: { text: 'Focus', color: 'text-[var(--text-primary)] border-[var(--text-primary)]' },
+    shortBreak: { text: 'Short Break', color: 'text-[var(--text-secondary)] border-[var(--text-secondary)]' },
+    longBreak: { text: 'Long Break', color: 'text-[var(--accent)] border-[var(--accent)]' },
+  }[mode] || { text: 'Focus', color: 'text-[var(--text-primary)]' };
 
   return (
     <div className="retro-panel-inset p-4 mb-4 flex flex-col items-center justify-center relative overflow-hidden">
@@ -18,13 +18,13 @@ export function DigitalDisplay({ timeLeft, totalDuration, mode, isRunning, compl
 
       {/* Top Status Header */}
       <div className="w-full flex items-center justify-between text-[10px] font-mono text-[var(--text-dim)] mb-1 z-10">
-        <span className={`px-2 py-0.5 border uppercase font-bold tracking-widest ${modeBadge.color}`}>
+        <span className={`px-2 py-0.5 border font-bold tracking-widest ${modeBadge.color}`}>
           {modeBadge.text}
         </span>
         <div className="flex items-center space-x-1">
-          <span className="text-[var(--text-dim)]">CYCLE:</span>
+          <span className="text-[var(--text-dim)]">Round:</span>
           <span className="text-[var(--text-primary)] font-bold">
-            {(completedSessions % 4) + 1} / 4
+            {(completedSessions % 4) + 1} of 4
           </span>
         </div>
       </div>
@@ -44,7 +44,7 @@ export function DigitalDisplay({ timeLeft, totalDuration, mode, isRunning, compl
         </div>
         <div className="flex justify-between text-[9px] font-mono text-[var(--text-dim)] mt-1">
           <span>00:00</span>
-          <span>{Math.round(progressPercent)}% ELAPSED</span>
+          <span>{Math.round(progressPercent)}% done</span>
           <span>{Math.floor(totalDuration / 60)}:00</span>
         </div>
       </div>

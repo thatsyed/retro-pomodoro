@@ -82,12 +82,12 @@ export function CassettePlayer() {
       <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-[var(--border-color)] text-[10px] font-pixel">
         <div className="flex items-center space-x-1.5 text-[var(--text-primary)]">
           <Disc className={`w-3.5 h-3.5 ${isPlaying ? 'animate-spin' : ''}`} />
-          <span>LO-FI TAPE DECK</span>
+          <span>Cassette Player</span>
         </div>
-        <span className={`text-[9px] font-mono px-1.5 py-0.2 border uppercase ${
+        <span className={`text-[9px] font-mono px-1.5 py-0.2 border ${
           isPlaying ? 'border-[var(--text-primary)] text-[var(--text-primary)] animate-pulse' : 'border-[var(--border-color)] text-[var(--text-dim)]'
         }`}>
-          {isPlaying ? 'PLAYING' : 'STANDBY'}
+          {isPlaying ? 'Playing' : 'Paused'}
         </span>
       </div>
 
@@ -103,7 +103,7 @@ export function CassettePlayer() {
             {track?.title || "I Don't Understand A Thing"}
           </div>
           <div className="text-[9px] text-[var(--text-dim)] truncate">
-            ARTIST: {track?.artist || 'HoliznaCC0'} // ROYALTY-FREE FOCUS
+            {track?.artist || 'HoliznaCC0'}
           </div>
         </div>
         <div className="text-right text-[10px] text-[var(--text-secondary)] shrink-0 font-bold">
@@ -118,7 +118,7 @@ export function CassettePlayer() {
             type="button"
             onClick={handlePrev}
             className="p-1.5 bg-[var(--bg-surface)] text-[var(--text-dim)] hover:text-[var(--text-primary)] border border-[var(--border-color)] transition-all cursor-pointer"
-            title="Previous Track"
+            title="Previous track"
           >
             <SkipBack className="w-3.5 h-3.5 stroke-[2.5]" />
           </button>
@@ -131,17 +131,17 @@ export function CassettePlayer() {
                 ? 'bg-[var(--accent)] text-[var(--bg-app)] border-[var(--accent)] shadow-[var(--glow-accent)] font-bold'
                 : 'bg-[var(--text-primary)] text-[var(--bg-app)] border-[var(--text-primary)] shadow-[var(--glow-primary)] font-bold'
             }`}
-            title={isPlaying ? 'Pause Tape' : 'Play Tape'}
+            title={isPlaying ? 'Pause tape' : 'Play tape'}
           >
             {isPlaying ? (
               <>
                 <Pause className="w-3 h-3 fill-current" />
-                <span>PAUSE</span>
+                <span>Pause</span>
               </>
             ) : (
               <>
                 <Play className="w-3 h-3 fill-current" />
-                <span>PLAY</span>
+                <span>Play</span>
               </>
             )}
           </button>
@@ -150,7 +150,7 @@ export function CassettePlayer() {
             type="button"
             onClick={handleNext}
             className="p-1.5 bg-[var(--bg-surface)] text-[var(--text-dim)] hover:text-[var(--text-primary)] border border-[var(--border-color)] transition-all cursor-pointer"
-            title="Next Track"
+            title="Next track"
           >
             <SkipForward className="w-3.5 h-3.5 stroke-[2.5]" />
           </button>
@@ -163,7 +163,7 @@ export function CassettePlayer() {
                 ? 'bg-[var(--text-primary)]/15 border-[var(--text-primary)] text-[var(--text-primary)]'
                 : 'bg-[var(--bg-surface)] border-[var(--border-color)] text-[var(--text-dim)]'
             }`}
-            title={isLooping ? 'Looping Enabled' : 'Looping Disabled'}
+            title={isLooping ? 'Repeat on' : 'Repeat off'}
           >
             <Repeat className="w-3.5 h-3.5 stroke-[2.5]" />
           </button>
@@ -191,7 +191,7 @@ export function CassettePlayer() {
             value={isMuted ? 0 : volume}
             onChange={handleVolumeChange}
             className="w-16 accent-[var(--text-primary)] cursor-pointer h-1.5 bg-[var(--bg-app)] border border-[var(--border-color)]"
-            title={`Music Volume: ${Math.round((isMuted ? 0 : volume) * 100)}%`}
+            title={`Music volume: ${Math.round((isMuted ? 0 : volume) * 100)}%`}
           />
         </div>
       </div>
