@@ -9,11 +9,18 @@ class AudioPlayerService {
     this.listeners = new Set();
     this.trackList = [
       {
-        id: 'holizna-lofi',
-        title: "I Don't Understand A Thing",
-        artist: 'HoliznaCC0',
-        url: '/sounds/music/HoliznaCC0 - I Don\'t Understand A Thing.mp3',
-        duration: 213,
+        id: 'popoi-georgetown-cafe',
+        title: 'Georgetown Cafe',
+        artist: 'Popoi',
+        url: '/sounds/music/Popoi - Georgetown Cafe.mp3',
+        duration: 168,
+      },
+      {
+        id: 'vibedepot-cafe',
+        title: 'Cafe',
+        artist: 'VibeDepot',
+        url: '/sounds/music/VibeDepot - cafe.mp3',
+        duration: 120,
       }
     ];
     this.currentTrackIndex = 0;
@@ -68,7 +75,7 @@ class AudioPlayerService {
     try {
       const track = this.getCurrentTrack();
       if (!track) return;
-      if (!this.audio.src || !this.audio.src.includes(encodeURI('HoliznaCC0'))) {
+      if (!this.audio.src || !this.audio.src.endsWith(encodeURI(track.url)) && !this.audio.src.includes(encodeURI(track.title))) {
         this.audio.src = track.url;
       }
       await this.audio.play();

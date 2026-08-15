@@ -54,7 +54,7 @@ test.describe('Retro Pomodoro Workstation E2E Verification', () => {
   test('controls Lo-Fi cassette tape deck', async ({ page }) => {
     const tapeSection = page.locator('.cassette-shell');
     await expect(tapeSection).toBeVisible();
-    await expect(page.locator('text=I Don\'t Understand A Thing')).toBeVisible();
+    await expect(page.locator('text=Georgetown Cafe')).toBeVisible();
 
     // Click tape play button
     const tapePlayBtn = tapeSection.locator('button[title="Play tape"]');

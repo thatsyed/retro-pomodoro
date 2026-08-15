@@ -100,14 +100,14 @@ export function CassettePlayer() {
       <div className="bg-[var(--bg-app)] border border-[var(--border-color)] p-2 my-2 flex items-center justify-between font-mono">
         <div className="truncate pr-2">
           <div className="text-[11px] text-[var(--text-primary)] font-bold truncate">
-            {track?.title || "I Don't Understand A Thing"}
+            {track?.title || "Georgetown Cafe"}
           </div>
           <div className="text-[9px] text-[var(--text-dim)] truncate">
-            {track?.artist || 'HoliznaCC0'}
+            {track?.artist || 'Popoi'}
           </div>
         </div>
         <div className="text-right text-[10px] text-[var(--text-secondary)] shrink-0 font-bold">
-          {formatTime(currentTime)} / {formatTime(duration || 213)}
+          {formatTime(currentTime)} / {formatTime(duration || 168)}
         </div>
       </div>
 
@@ -126,23 +126,17 @@ export function CassettePlayer() {
           <button
             type="button"
             onClick={handleTogglePlay}
-            className={`px-3 py-1.5 text-xs font-pixel flex items-center space-x-1 border transition-all cursor-pointer ${
+            className={`p-1.5 border transition-all cursor-pointer flex items-center justify-center ${
               isPlaying
-                ? 'bg-[var(--accent)] text-[var(--bg-app)] border-[var(--accent)] shadow-[var(--glow-accent)] font-bold'
-                : 'bg-[var(--text-primary)] text-[var(--bg-app)] border-[var(--text-primary)] shadow-[var(--glow-primary)] font-bold'
+                ? 'bg-[var(--accent)] text-[var(--bg-app)] border-[var(--accent)] shadow-[var(--glow-accent)]'
+                : 'bg-[var(--text-primary)] text-[var(--bg-app)] border-[var(--text-primary)] shadow-[var(--glow-primary)]'
             }`}
             title={isPlaying ? 'Pause tape' : 'Play tape'}
           >
             {isPlaying ? (
-              <>
-                <Pause className="w-3 h-3 fill-current" />
-                <span>Pause</span>
-              </>
+              <Pause className="w-3.5 h-3.5 fill-current stroke-[2.5]" />
             ) : (
-              <>
-                <Play className="w-3 h-3 fill-current" />
-                <span>Play</span>
-              </>
+              <Play className="w-3.5 h-3.5 fill-current stroke-[2.5]" />
             )}
           </button>
 
