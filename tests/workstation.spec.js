@@ -6,17 +6,17 @@ test.describe('Retro Pomodoro Workstation E2E Verification', () => {
   });
 
   test('renders 3-deck cockpit and header correctly', async ({ page }) => {
-    await expect(page.locator('h1')).toContainText('RETRO POMODORO // v2.0');
-    await expect(page.locator('text=TASKS // TODO')).toBeVisible();
-    await expect(page.locator('text=LO-FI TAPE DECK')).toBeVisible();
-    await expect(page.locator('text=REMINDERS')).toBeVisible();
-    await expect(page.locator('text=AMBIENT SOUNDSCAPES')).toBeVisible();
+    await expect(page.locator('h1')).toContainText('Retro Pomodoro');
+    await expect(page.locator('text=Tasks').first()).toBeVisible();
+    await expect(page.locator('text=Cassette Player')).toBeVisible();
+    await expect(page.locator('text=Reminders').first()).toBeVisible();
+    await expect(page.locator('text=Ambient Sounds')).toBeVisible();
   });
 
   test('manages tasks: add, check off, and filter', async ({ page }) => {
     const taskInput = page.locator('#task-input');
     await taskInput.fill('Deep code review session');
-    await page.locator('button:has-text("ADD")').click();
+    await page.locator('button:has-text("Add")').first().click();
 
     await expect(page.locator('text=Deep code review session')).toBeVisible();
 
@@ -25,30 +25,30 @@ test.describe('Retro Pomodoro Workstation E2E Verification', () => {
     const checkbox = taskRow.locator('button[title="Mark completed"]');
     await checkbox.click();
 
-    // Filter Active vs Completed
-    await page.locator('button:has-text("active")').click();
+    // Filter Active vs Done
+    await page.getByRole('button', { name: /^Active/ }).click();
     await expect(page.locator('text=Deep code review session')).not.toBeVisible();
 
-    await page.locator('button:has-text("completed")').click();
+    await page.getByRole('button', { name: /^Done/ }).click();
     await expect(page.locator('text=Deep code review session')).toBeVisible();
   });
 
   test('controls Pomodoro timer and updates countdown & tab title', async ({ page }) => {
-    const startButton = page.locator('button:has-text("START")');
+    const startButton = page.locator('button:has-text("Start")');
     await expect(startButton).toBeVisible();
     await startButton.click();
 
-    // After start, should show PAUSE
-    const pauseButton = page.locator('button:has-text("PAUSE")').first();
+    // After start, should show Pause
+    const pauseButton = page.locator('button:has-text("Pause")').first();
     await expect(pauseButton).toBeVisible();
 
     // Tab title should update
-    await expect(page).toHaveTitle(/\[\d{2}:\d{2}\] Focus \/\/ Retro Pomodoro/);
+    await expect(page).toHaveTitle(/\[\d{2}:\d{2}\] Focus · Retro Pomodoro/);
 
-    // Switch mode to SHORT BREAK
-    await page.locator('button:has-text("SHORT BREAK")').click();
-    await expect(page.locator('text=SHORT BREAK').first()).toBeVisible();
-    await expect(page).toHaveTitle(/Short Break \/\/ Retro Pomodoro/);
+    // Switch mode to Short Break
+    await page.locator('button:has-text("Short Break")').first().click();
+    await expect(page.locator('text=Short Break').first()).toBeVisible();
+    await expect(page).toHaveTitle(/Short Break · Retro Pomodoro/);
   });
 
   test('controls Lo-Fi cassette tape deck', async ({ page }) => {
@@ -57,14 +57,14 @@ test.describe('Retro Pomodoro Workstation E2E Verification', () => {
     await expect(page.locator('text=I Don\'t Understand A Thing')).toBeVisible();
 
     // Click tape play button
-    const tapePlayBtn = tapeSection.locator('button[title="Play Tape"]');
+    const tapePlayBtn = tapeSection.locator('button[title="Play tape"]');
     await tapePlayBtn.click();
-    await expect(tapeSection.locator('text=PLAYING')).toBeVisible();
+    await expect(tapeSection.locator('text=Playing')).toBeVisible();
   });
 
   test('toggles reminders and theme presets', async ({ page }) => {
     // Toggle reminder
-    const toggleBtn = page.getByRole('button', { name: 'Disable Reminder' }).first();
+    const toggleBtn = page.getByRole('button', { name: 'Disable reminder' }).first();
     await toggleBtn.click();
 
     // Theme selector
