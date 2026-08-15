@@ -56,22 +56,61 @@ export function AudioDeck({
         </div>
 
         <div className="deck-screen flex flex-col gap-3">
-          {/* Cassette Graphic & Now Playing Status */}
-          <div className="bg-black/30 border border-white/10 rounded-xs p-2 flex flex-col gap-2 z-[6]">
-            <div className="flex items-center justify-between">
+          {/* Detailed Lo-Fi Cassette Tape Graphic */}
+          <div className="relative bg-[#120d0c] border-2 border-[var(--color-border)] rounded-md p-2.5 flex flex-col gap-2 z-[6] shadow-[inset_2px_2px_6px_rgba(0,0,0,0.7)]">
+            {/* Cassette Header Bar */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
               <div className="flex items-center gap-2">
-                <span className={`w-2.5 h-2.5 rounded-full ${isPlayingMusic ? 'bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse' : 'bg-amber-600'}`} />
-                <span className="font-mono text-xs font-bold text-[var(--color-screen-glow)] truncate max-w-[160px]">
-                  {currentTrack.name}
+                <span className={`w-2.5 h-2.5 rounded-full border border-black/40 ${isPlayingMusic ? 'bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse' : 'bg-amber-700/60'}`} />
+                <span className="font-['Press_Start_2P',cursive] text-[9px] text-[var(--color-screen-glow)] tracking-tight truncate max-w-[140px]">
+                  SIDE-A • {currentTrack.name}
                 </span>
               </div>
-              <span className="font-['VT323',monospace] text-base text-[var(--color-screen-text)] tabular-nums opacity-90">
+              <span className="font-['VT323',monospace] text-lg text-[var(--color-screen-glow)] tabular-nums tracking-widest leading-none">
                 {formatTime(Math.floor(currentTime))} / {formatTime(Math.floor(duration))}
               </span>
             </div>
 
+            {/* Cassette Window with Dual Spinning Reels */}
+            <div className="relative h-14 bg-[#1e1513] rounded border border-white/10 flex items-center justify-between px-6 overflow-hidden">
+              {/* Magnetic Tape Ribbon */}
+              <div className="absolute inset-x-12 top-1/2 h-[3px] -translate-y-1/2 bg-[#5c3e34] shadow-[0_0_4px_rgba(0,0,0,0.8)] pointer-events-none" />
+
+              {/* Left Reel */}
+              <div className="relative z-10 flex items-center justify-center">
+                <div className={`w-9 h-9 rounded-full border-2 border-white/30 bg-[#2c1d1a] flex items-center justify-center ${isPlayingMusic ? 'reel-spinning' : ''}`}>
+                  <div className="w-3.5 h-3.5 rounded-full border border-white/40 bg-black/60 flex items-center justify-center">
+                    <span className="w-1 h-1 rounded-full bg-white/70" />
+                  </div>
+                  <span className="absolute w-full h-[1.5px] bg-white/20" />
+                  <span className="absolute h-full w-[1.5px] bg-white/20" />
+                </div>
+              </div>
+
+              {/* Center Tape Window Badge */}
+              <div className="relative z-10 flex flex-col items-center bg-black/50 px-2 py-0.5 rounded border border-white/10">
+                <span className="font-['Press_Start_2P',cursive] text-[7px] text-[var(--color-warning)] tracking-wider">
+                  HIGH BIAS
+                </span>
+                <span className="font-mono text-[8px] text-[var(--color-screen-text)] opacity-70">
+                  STEREO 60
+                </span>
+              </div>
+
+              {/* Right Reel */}
+              <div className="relative z-10 flex items-center justify-center">
+                <div className={`w-9 h-9 rounded-full border-2 border-white/30 bg-[#2c1d1a] flex items-center justify-center ${isPlayingMusic ? 'reel-spinning' : ''}`}>
+                  <div className="w-3.5 h-3.5 rounded-full border border-white/40 bg-black/60 flex items-center justify-center">
+                    <span className="w-1 h-1 rounded-full bg-white/70" />
+                  </div>
+                  <span className="absolute w-full h-[1.5px] bg-white/20" />
+                  <span className="absolute h-full w-[1.5px] bg-white/20" />
+                </div>
+              </div>
+            </div>
+
             {/* Track Progress Scrubber */}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-1 pt-1">
               <input
                 type="range"
                 min="0"
@@ -80,26 +119,27 @@ export function AudioDeck({
                 value={isNaN(progressPercent) ? 0 : progressPercent}
                 onChange={(e) => onSeek?.(parseFloat(e.target.value))}
                 aria-label="Track progress seek"
-                className="w-full h-2 bg-black/50 rounded-xs accent-[var(--color-warning)] cursor-pointer"
+                className="w-full h-2 bg-black/70 rounded-xs accent-[var(--color-warning)] cursor-pointer"
               />
             </div>
 
             {/* Cassette Transport Controls */}
-            <div className="flex items-center justify-center gap-2 pt-1">
+            <div className="flex items-center justify-between gap-2 pt-0.5">
               <button
                 onClick={onPrevTrack}
                 aria-label="Previous track"
-                className="p-1.5 bg-white/10 hover:bg-white/20 rounded-xs text-[var(--color-screen-text)] transition-colors cursor-pointer"
+                className="flex-1 py-1.5 px-2 bg-white/10 hover:bg-white/20 rounded border border-white/15 text-[var(--color-screen-text)] transition-all cursor-pointer flex items-center justify-center gap-1 active:scale-95"
                 title="Previous Track"
               >
-                <SvgIcon name="RotateCcw" size={15} />
+                <SvgIcon name="RotateCcw" size={14} />
+                <span className="font-mono text-[10px] font-bold">PREV</span>
               </button>
 
               <RetroButton
                 variant={isPlayingMusic ? 'warning' : 'primary'}
                 size="sm"
                 onClick={onToggleMusic}
-                className="px-4 py-1.5"
+                className="flex-[1.5] py-2"
               >
                 <SvgIcon name={isPlayingMusic ? 'Pause' : 'Play'} size={15} />
                 <span>{isPlayingMusic ? 'PAUSE' : 'PLAY'}</span>
@@ -108,10 +148,11 @@ export function AudioDeck({
               <button
                 onClick={onNextTrack}
                 aria-label="Next track"
-                className="p-1.5 bg-white/10 hover:bg-white/20 rounded-xs text-[var(--color-screen-text)] transition-colors cursor-pointer"
+                className="flex-1 py-1.5 px-2 bg-white/10 hover:bg-white/20 rounded border border-white/15 text-[var(--color-screen-text)] transition-all cursor-pointer flex items-center justify-center gap-1 active:scale-95"
                 title="Next Track"
               >
-                <SvgIcon name="RotateCcw" size={15} className="scale-x-[-1]" />
+                <span className="font-mono text-[10px] font-bold">NEXT</span>
+                <SvgIcon name="RotateCcw" size={14} className="scale-x-[-1]" />
               </button>
             </div>
           </div>
@@ -124,33 +165,33 @@ export function AudioDeck({
                 <button
                   key={track.id}
                   onClick={() => onSelectTrack(idx)}
-                  className={`flex items-center justify-between py-1.5 px-2.5 rounded-[var(--btn-radius)] border-2 border-[var(--color-border)] font-mono text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex items-center justify-between py-2 px-3 rounded-[var(--btn-radius)] border-2 border-[var(--color-border)] font-mono text-xs font-bold transition-all cursor-pointer ${
                     isActive
-                      ? 'bg-[var(--color-warning)] text-[var(--color-border)] shadow-[1px_1px_0_var(--color-btn-shadow)] translate-x-0.5'
+                      ? 'bg-[var(--color-warning)] text-[var(--color-border)] shadow-[1px_1px_0_var(--color-btn-shadow)] translate-x-1'
                       : 'bg-[var(--color-card)] text-[var(--color-border)] hover:bg-[var(--color-warning)] shadow-[2px_2px_0_var(--color-btn-shadow)]'
                   }`}
                 >
-                  <div className="flex items-center gap-2 truncate">
-                    <span className="font-['Press_Start_2P',cursive] text-[9px] opacity-70">{idx + 1}</span>
+                  <div className="flex items-center gap-2.5 truncate">
+                    <span className="font-['Press_Start_2P',cursive] text-[8px] opacity-75">{idx + 1}</span>
                     <span className="truncate">{track.name}</span>
                   </div>
                   <span className="font-['VT323',monospace] text-base">
-                    {isActive && isPlayingMusic ? '♪ ACTIVE' : '♪'}
+                    {isActive && isPlayingMusic ? '♪ PLAYING' : '♪ READY'}
                   </span>
                 </button>
               );
             })}
           </div>
 
-          {/* Volume Control Row */}
-          <div className="flex justify-between items-center z-[6] text-xs font-bold pt-1 border-t border-white/10">
+          {/* Volume Control Row with Mute Button */}
+          <div className="flex justify-between items-center z-[6] text-xs font-bold pt-1.5 border-t border-white/10">
             <button
               onClick={onToggleMute}
-              className="flex items-center gap-1.5 text-[var(--color-screen-text)] hover:text-[var(--color-warning)] cursor-pointer"
+              className="flex items-center gap-1.5 text-[var(--color-screen-text)] hover:text-[var(--color-warning)] transition-colors cursor-pointer"
               title={isMuted ? 'Unmute' : 'Mute'}
             >
               <SvgIcon name={isMuted ? 'VolumeX' : 'Volume2'} size={15} />
-              <span>VOL: {isMuted ? 'MUTE' : `${Math.round(musicVolume * 100)}%`}</span>
+              <span>VOL: {isMuted ? 'MUTED' : `${Math.round(musicVolume * 100)}%`}</span>
             </button>
             <input
               type="range"
@@ -160,7 +201,7 @@ export function AudioDeck({
               value={isMuted ? 0 : musicVolume}
               onChange={(e) => onSetMusicVolume(parseFloat(e.target.value))}
               aria-label="Music Volume"
-              className="w-24 accent-[var(--color-primary)] cursor-pointer"
+              className="w-28 accent-[var(--color-primary)] cursor-pointer"
             />
           </div>
 
