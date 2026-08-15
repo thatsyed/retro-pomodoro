@@ -25,18 +25,10 @@ export function HeaderBar({
   return (
     <header className="retro-bezel bg-[var(--bg-deck)] p-3 mb-4 flex flex-wrap items-center justify-between gap-3">
       {/* Brand Title */}
-      <div className="flex items-center space-x-2.5">
-        <div className="w-8 h-8 bg-[var(--bg-app)] border border-[var(--text-primary)] flex items-center justify-center text-[var(--text-primary)] shadow-[var(--glow-primary)]">
-          <Terminal className="w-4 h-4" />
-        </div>
-        <div>
-          <h1 className="font-pixel text-xs sm:text-sm text-[var(--text-primary)] glow-text tracking-wider">
-            Retro Pomodoro
-          </h1>
-          <p className="font-mono text-[9px] text-[var(--text-dim)] uppercase tracking-widest">
-            Focus console
-          </p>
-        </div>
+      <div className="flex items-center">
+        <h1 className="font-pixel text-xs sm:text-sm text-[var(--text-primary)] glow-text tracking-wider">
+          Retro Pomodoro
+        </h1>
       </div>
 
       {/* Header Action Controls */}
