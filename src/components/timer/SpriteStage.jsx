@@ -79,6 +79,37 @@ export function SpriteStage({ activeSprite = 'mug', isRunning, currentMode }) {
           </svg>
         </div>
       )}
+
+      {/* 5. Pixel Ghost */}
+      {activeSprite === 'ghost' && (
+        <div className={`relative ${isRunning ? 'animate-bounce' : ''}`}>
+          <svg viewBox="0 0 64 64" className="w-14 h-14" aria-hidden="true">
+            <path
+              d="M16 32 C16 18 24 10 32 10 C40 10 48 18 48 32 L48 52 L42 46 L36 52 L32 48 L28 52 L22 46 L16 52 Z"
+              className="fill-[var(--color-white)] stroke-[var(--color-border)] stroke-2"
+            />
+            <circle cx="26" cy="28" r="3" className="fill-[var(--color-border)]" />
+            <circle cx="38" cy="28" r="3" className="fill-[var(--color-border)]" />
+            <ellipse cx="32" cy="36" rx="3" ry="2" className="fill-[var(--color-border)] opacity-60" />
+          </svg>
+        </div>
+      )}
+
+      {/* 6. Pixel Robot */}
+      {activeSprite === 'robot' && (
+        <div className={`relative ${isRunning ? 'animate-pulse' : ''}`}>
+          <svg viewBox="0 0 64 64" className="w-14 h-14" aria-hidden="true">
+            <line x1="32" y1="8" x2="32" y2="16" className="stroke-[var(--color-border)] stroke-2" />
+            <circle cx="32" cy="6" r="3" className="fill-[var(--color-warning)] stroke-[var(--color-border)] stroke-2" />
+            <rect x="18" y="16" width="28" height="22" rx="3" className="fill-[var(--color-chassis)] stroke-[var(--color-border)] stroke-2" />
+            <rect x="22" y="22" width="6" height="5" className="fill-[var(--color-primary)]" />
+            <rect x="36" y="22" width="6" height="5" className="fill-[var(--color-primary)]" />
+            <line x1="24" y1="32" x2="40" y2="32" className="stroke-[var(--color-border)] stroke-2" />
+            <rect x="22" y="40" width="20" height="14" rx="2" className="fill-[var(--color-chassis-dark)] stroke-[var(--color-border)] stroke-2" />
+            <circle cx="32" cy="47" r="3" className="fill-[var(--color-danger)]" />
+          </svg>
+        </div>
+      )}
     </div>
   );
 }

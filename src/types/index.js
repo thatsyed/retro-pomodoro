@@ -44,7 +44,9 @@ export const SPRITES = [
   { id: 'mug', label: 'Cozy Mug', icon: 'Coffee' },
   { id: 'cat', label: 'Pixel Cat', icon: 'Cat' },
   { id: 'plant', label: 'Pixel Bonsai', icon: 'Sprout' },
-  { id: 'tape', label: 'Lo-Fi Cassette', icon: 'CassetteTape' }
+  { id: 'tape', label: 'Lo-Fi Cassette', icon: 'CassetteTape' },
+  { id: 'ghost', label: 'Pixel Ghost', icon: 'Flame' },
+  { id: 'robot', label: 'Pixel Robot', icon: 'Tv' }
 ];
 
 export const PRIORITIES = {
