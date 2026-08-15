@@ -5,6 +5,7 @@ class AudioPlayerService {
     if (this.audio) {
       this.audio.preload = 'auto';
       this.audio.loop = true;
+      this.audio.volume = 0.65;
     }
     this.listeners = new Set();
     this.trackList = [

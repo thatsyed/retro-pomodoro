@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Repeat, Volume2, VolumeX, Disc } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Repeat, Disc } from 'lucide-react';
 import { audioPlayer } from '../../services/audioPlayer';
 import { CassetteReels } from './CassetteReels';
 import { soundSynth } from '../../services/soundSynth';
@@ -9,8 +9,6 @@ export function CassettePlayer() {
   const [track, setTrack] = useState(audioPlayer.getCurrentTrack());
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.8);
-  const [isMuted, setIsMuted] = useState(false);
   const [isLooping, setIsLooping] = useState(true);
 
   useEffect(() => {
@@ -25,10 +23,8 @@ export function CassettePlayer() {
       }
     });
 
-    audioPlayer.setVolume(volume);
-
     return () => unsubscribe();
-  }, [volume]);
+  }, []);
 
   const handleTogglePlay = () => {
     soundSynth.playButtonClick();
@@ -50,24 +46,6 @@ export function CassettePlayer() {
     const nextLoop = !isLooping;
     setIsLooping(nextLoop);
     audioPlayer.setLoop(nextLoop);
-  };
-
-  const handleVolumeChange = (e) => {
-    const val = parseFloat(e.target.value);
-    setVolume(val);
-    if (isMuted && val > 0) setIsMuted(false);
-    audioPlayer.setVolume(val);
-  };
-
-  const handleToggleMute = () => {
-    soundSynth.playButtonClick();
-    if (isMuted) {
-      setIsMuted(false);
-      audioPlayer.setVolume(volume);
-    } else {
-      setIsMuted(true);
-      audioPlayer.setVolume(0);
-    }
   };
 
   const formatTime = (secs) => {
@@ -111,83 +89,55 @@ export function CassettePlayer() {
         </div>
       </div>
 
-      {/* Tape Controls & Volume */}
-      <div className="flex items-center justify-between pt-1">
-        <div className="flex items-center space-x-1.5">
-          <button
-            type="button"
-            onClick={handlePrev}
-            className="p-1.5 bg-[var(--bg-surface)] text-[var(--text-dim)] hover:text-[var(--text-primary)] border border-[var(--border-color)] transition-all cursor-pointer"
-            title="Previous track"
-          >
-            <SkipBack className="w-3.5 h-3.5 stroke-[2.5]" />
-          </button>
+      {/* Tape Controls */}
+      <div className="flex items-center justify-center space-x-2 pt-1">
+        <button
+          type="button"
+          onClick={handlePrev}
+          className="p-1.5 bg-[var(--bg-surface)] text-[var(--text-dim)] hover:text-[var(--text-primary)] border border-[var(--border-color)] transition-all cursor-pointer"
+          title="Previous track"
+        >
+          <SkipBack className="w-3.5 h-3.5 stroke-[2.5]" />
+        </button>
 
-          <button
-            type="button"
-            onClick={handleTogglePlay}
-            className={`p-1.5 border transition-all cursor-pointer flex items-center justify-center ${
-              isPlaying
-                ? 'bg-[var(--accent)] text-[var(--bg-app)] border-[var(--accent)] shadow-[var(--glow-accent)]'
-                : 'bg-[var(--text-primary)] text-[var(--bg-app)] border-[var(--text-primary)] shadow-[var(--glow-primary)]'
-            }`}
-            title={isPlaying ? 'Pause tape' : 'Play tape'}
-          >
-            {isPlaying ? (
-              <Pause className="w-3.5 h-3.5 fill-current stroke-[2.5]" />
-            ) : (
-              <Play className="w-3.5 h-3.5 fill-current stroke-[2.5]" />
-            )}
-          </button>
+        <button
+          type="button"
+          onClick={handleTogglePlay}
+          className={`p-1.5 border transition-all cursor-pointer flex items-center justify-center ${
+            isPlaying
+              ? 'bg-[var(--accent)] text-[var(--bg-app)] border-[var(--accent)] shadow-[var(--glow-accent)]'
+              : 'bg-[var(--text-primary)] text-[var(--bg-app)] border-[var(--text-primary)] shadow-[var(--glow-primary)]'
+          }`}
+          title={isPlaying ? 'Pause tape' : 'Play tape'}
+        >
+          {isPlaying ? (
+            <Pause className="w-3.5 h-3.5 fill-current stroke-[2.5]" />
+          ) : (
+            <Play className="w-3.5 h-3.5 fill-current stroke-[2.5]" />
+          )}
+        </button>
 
-          <button
-            type="button"
-            onClick={handleNext}
-            className="p-1.5 bg-[var(--bg-surface)] text-[var(--text-dim)] hover:text-[var(--text-primary)] border border-[var(--border-color)] transition-all cursor-pointer"
-            title="Next track"
-          >
-            <SkipForward className="w-3.5 h-3.5 stroke-[2.5]" />
-          </button>
+        <button
+          type="button"
+          onClick={handleNext}
+          className="p-1.5 bg-[var(--bg-surface)] text-[var(--text-dim)] hover:text-[var(--text-primary)] border border-[var(--border-color)] transition-all cursor-pointer"
+          title="Next track"
+        >
+          <SkipForward className="w-3.5 h-3.5 stroke-[2.5]" />
+        </button>
 
-          <button
-            type="button"
-            onClick={handleToggleLoop}
-            className={`p-1.5 border transition-all cursor-pointer ${
-              isLooping
-                ? 'bg-[var(--text-primary)]/15 border-[var(--text-primary)] text-[var(--text-primary)]'
-                : 'bg-[var(--bg-surface)] border-[var(--border-color)] text-[var(--text-dim)]'
-            }`}
-            title={isLooping ? 'Repeat on' : 'Repeat off'}
-          >
-            <Repeat className="w-3.5 h-3.5 stroke-[2.5]" />
-          </button>
-        </div>
-
-        {/* Tape Deck Volume Slider */}
-        <div className="flex items-center space-x-2 pl-2">
-          <button
-            type="button"
-            onClick={handleToggleMute}
-            className="text-[var(--text-dim)] hover:text-[var(--text-primary)] cursor-pointer"
-            title={isMuted ? 'Unmute' : 'Mute'}
-          >
-            {isMuted || volume === 0 ? (
-              <VolumeX className="w-3.5 h-3.5 text-[var(--danger)]" />
-            ) : (
-              <Volume2 className="w-3.5 h-3.5" />
-            )}
-          </button>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.05"
-            value={isMuted ? 0 : volume}
-            onChange={handleVolumeChange}
-            className="w-16 accent-[var(--text-primary)] cursor-pointer h-1.5 bg-[var(--bg-app)] border border-[var(--border-color)]"
-            title={`Music volume: ${Math.round((isMuted ? 0 : volume) * 100)}%`}
-          />
-        </div>
+        <button
+          type="button"
+          onClick={handleToggleLoop}
+          className={`p-1.5 border transition-all cursor-pointer ${
+            isLooping
+              ? 'bg-[var(--text-primary)]/15 border-[var(--text-primary)] text-[var(--text-primary)]'
+              : 'bg-[var(--bg-surface)] border-[var(--border-color)] text-[var(--text-dim)]'
+          }`}
+          title={isLooping ? 'Repeat on' : 'Repeat off'}
+        >
+          <Repeat className="w-3.5 h-3.5 stroke-[2.5]" />
+        </button>
       </div>
     </div>
   );
