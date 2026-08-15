@@ -94,10 +94,8 @@
   * Display: Current Track Title, Artist, Elapsed / Total Duration counter.
   * Controls: Previous Track, Play/Pause, Next Track, Seamless Looping Toggle, Volume Fader.
   * Pre-loaded with royalty-free Lo-Fi focus tracks:
-    1. *Lo-Fi Chill* (Smooth ambient beats)
-    2. *Morning Coffee* (Warm acoustic vinyl focus)
-    3. *Starlit Focus* (Dreamy synth chords)
-    4. *Midnight Terminal* (Deep focus flow)
+    1. *HoliznaCC0 - I Don't Understand A Thing* (`sounds/music/HoliznaCC0 - I Don't Understand A Thing.mp3`)
+    2. Procedural infinite focus lo-fi ambient layers
 
 ### 3.3 Right Deck: Reminders & Ambient Soundscape Mixer
 * **Reminders Panel:**
@@ -110,7 +108,7 @@
   * Ability to add custom reminders with customizable interval and title.
   * Toggle switches to enable/disable each reminder independently.
   * Countdown timer display showing time until next alert.
-  * Retro synth chime sound played when a reminder expires.
+  * Audio chime: uses `sounds/reminders/sfx_alarm_loop6.wav` + synthesized fallback.
 * **Ambient Soundscape Mixer:**
   * 4 procedural / sampled background noise channels:
     1. **Vinyl Crackle:** Warm analog record needle pops.
@@ -125,14 +123,12 @@
 
 1. **Music Player Engine:**
    * Uses HTML5 `Audio` with Web Audio API `MediaElementSourceNode` routed through a master gain node and visualizer analyzer.
-   * Zero audio latency, automatic looping, and track playlist management.
+   * Plays `sounds/music/HoliznaCC0 - I Don't Understand A Thing.mp3` with looping support and cassette reel synchronization.
 2. **Ambient Sound Generator:**
    * Synthesized using Web Audio API procedural audio nodes (Bandpass-filtered White Noise buffer for rain/waves, randomized click generator for vinyl crackle) for infinite looping with zero file buffering stalls.
-3. **Retro Reminder & Timer Chimes:**
-   * Procedurally generated FM synthesized chimes via Web Audio API `OscillatorNode` + `GainNode` envelopes:
-     * *Timer Finish:* 3-note ascending 8-bit arpeggio (`C5 -> E5 -> G5 -> C6`).
-     * *Reminder Alert:* Soft double-ping bell (`A5 -> D6`).
-     * *Button Click:* Subtle tactile mechanical switch click (`120Hz click transient`).
+3. **Tactile Button & Reminder SFX:**
+   * Button click SFX using `sounds/buttons/sfx_sounds_button6.wav`.
+   * Reminder & Alarm chime using `sounds/reminders/sfx_alarm_loop6.wav` + FM synthesis fallbacks.
 
 ---
 
@@ -159,10 +155,12 @@ d:/Projects/retro pomodoro/
 │   ├── favicon.svg
 │   ├── manifest.json
 │   └── sounds/
-│       └── music/
-│           ├── lofi-chill.wav
-│           ├── morning-coffee.wav
-│           └── starlit-focus.wav
+│       ├── music/
+│       │   └── HoliznaCC0 - I Don't Understand A Thing.mp3
+│       ├── buttons/
+│       │   └── sfx_sounds_button6.wav
+│       └── reminders/
+│           └── sfx_alarm_loop6.wav
 ├── src/
 │   ├── assets/
 │   ├── components/
