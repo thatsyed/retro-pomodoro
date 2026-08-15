@@ -2,19 +2,10 @@
 class SoundSynthService {
   constructor() {
     this.ctx = null;
-    this.ambientNodes = {
-      vinyl: null,
-      rain: null,
-      noise: null,
-      cafe: null,
-    };
-    this.gainNodes = {
-      vinyl: null,
-      rain: null,
-      noise: null,
-      cafe: null,
-      master: null,
-    };
+    this.noiseNode = null;
+    this.noiseGain = null;
+    this.masterGain = null;
+    this.rainAudio = null;
     this.initialized = false;
     this.buttonAudio = null;
     this.alarmAudio = null;
@@ -27,16 +18,13 @@ class SoundSynthService {
       if (!AudioContextClass) return;
       this.ctx = new AudioContextClass();
       
-      this.gainNodes.master = this.ctx.createGain();
-      this.gainNodes.master.gain.setValueAtTime(0.8, this.ctx.currentTime);
-      this.gainNodes.master.connect(this.ctx.destination);
+      this.masterGain = this.ctx.createGain();
+      this.masterGain.gain.setValueAtTime(0.8, this.ctx.currentTime);
+      this.masterGain.connect(this.ctx.destination);
 
-      ['vinyl', 'rain', 'noise', 'cafe'].forEach(key => {
-        const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(0, this.ctx.currentTime);
-        gain.connect(this.gainNodes.master);
-        this.gainNodes[key] = gain;
-      });
+      this.noiseGain = this.ctx.createGain();
+      this.noiseGain.gain.setValueAtTime(0, this.ctx.currentTime);
+      this.noiseGain.connect(this.masterGain);
 
       // Preload audio elements
       this.buttonAudio = new Audio('/sounds/buttons/sfx_sounds_button6.wav');
@@ -44,6 +32,10 @@ class SoundSynthService {
       
       this.alarmAudio = new Audio('/sounds/reminders/sfx_alarm_loop6.wav');
       this.alarmAudio.volume = 0.7;
+
+      this.rainAudio = new Audio('/sounds/music/rain/Rain.wav');
+      this.rainAudio.loop = true;
+      this.rainAudio.volume = 0.7;
 
       this.initialized = true;
     } catch (e) {
@@ -96,7 +88,7 @@ class SoundSynthService {
       gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
       osc.connect(gain);
-      gain.connect(this.gainNodes.master || this.ctx.destination);
+      gain.connect(this.masterGain || this.ctx.destination);
       osc.start();
       osc.stop(this.ctx.currentTime + 0.04);
     } catch (e) {
@@ -118,7 +110,7 @@ class SoundSynthService {
         gain.gain.linearRampToValueAtTime(0.2, startTime + 0.02);
         gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.4);
         osc.connect(gain);
-        gain.connect(this.gainNodes.master || this.ctx.destination);
+        gain.connect(this.masterGain || this.ctx.destination);
         osc.start(startTime);
         osc.stop(startTime + 0.4);
       });
@@ -127,65 +119,61 @@ class SoundSynthService {
     }
   }
 
-  setAmbientVolume(layer, volume) {
+  setAmbientPlaying(layer, isPlaying) {
     this.init();
     this.resume();
-    if (this.gainNodes[layer]) {
-      const targetGain = Math.max(0, Math.min(1, volume));
-      this.gainNodes[layer].gain.setTargetAtTime(targetGain, this.ctx.currentTime, 0.08);
-      
-      if (targetGain > 0 && !this.ambientNodes[layer]) {
-        this.startAmbientGenerator(layer);
-      } else if (targetGain === 0 && this.ambientNodes[layer]) {
-        // Can let it run or keep quiet
+    if (layer === 'rain') {
+      if (!this.rainAudio) {
+        this.rainAudio = new Audio('/sounds/music/rain/Rain.wav');
+        this.rainAudio.loop = true;
+        this.rainAudio.volume = 0.7;
+      }
+      if (isPlaying) {
+        this.rainAudio.play().catch(e => console.warn('Rain playback blocked:', e));
+      } else {
+        this.rainAudio.pause();
+      }
+    } else if (layer === 'noise') {
+      if (isPlaying) {
+        if (!this.noiseNode) {
+          this.startWhiteNoiseGenerator();
+        }
+        if (this.noiseGain) {
+          this.noiseGain.gain.setTargetAtTime(0.3, this.ctx.currentTime, 0.05);
+        }
+      } else {
+        if (this.noiseGain) {
+          this.noiseGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.05);
+        }
       }
     }
   }
 
-  startAmbientGenerator(layer) {
-    if (!this.ctx || this.ambientNodes[layer]) return;
+  startWhiteNoiseGenerator() {
+    if (!this.ctx || this.noiseNode) return;
     const bufferSize = this.ctx.sampleRate * 2;
     const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
     const data = buffer.getChannelData(0);
 
-    if (layer === 'noise') {
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * 0.15;
-      }
-    } else if (layer === 'rain') {
-      let lastOut = 0.0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        data[i] = (lastOut + 0.02 * white) / 1.02;
-        lastOut = data[i];
-        data[i] *= 3.5;
-      }
-    } else if (layer === 'vinyl') {
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() < 0.001 ? (Math.random() * 2 - 1) * 0.8 : (Math.random() * 2 - 1) * 0.012;
-      }
-    } else if (layer === 'cafe') {
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.sin(i * 0.015) * 0.025 + (Math.random() * 2 - 1) * 0.02;
-      }
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * 0.15;
     }
 
     const source = this.ctx.createBufferSource();
     source.buffer = buffer;
     source.loop = true;
-
-    if (layer === 'rain') {
-      const filter = this.ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.value = 1200;
-      source.connect(filter);
-      filter.connect(this.gainNodes[layer]);
-    } else {
-      source.connect(this.gainNodes[layer]);
-    }
-
+    source.connect(this.noiseGain);
     source.start();
-    this.ambientNodes[layer] = source;
+    this.noiseNode = source;
+  }
+
+  stopAllAmbient() {
+    if (this.rainAudio) {
+      this.rainAudio.pause();
+    }
+    if (this.noiseGain && this.ctx) {
+      this.noiseGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.05);
+    }
   }
 }
 

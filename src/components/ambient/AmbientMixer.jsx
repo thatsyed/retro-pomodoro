@@ -1,57 +1,36 @@
 import React, { useState } from 'react';
-import { Radio, CloudRain, Disc, Waves, Coffee, VolumeX, Volume2 } from 'lucide-react';
+import { Radio, CloudRain, Waves, Square } from 'lucide-react';
 import { AmbientChannel } from './AmbientChannel';
 import { soundSynth } from '../../services/soundSynth';
 
 export function AmbientMixer() {
-  const [volumes, setVolumes] = useState({
-    vinyl: 0,
-    rain: 0,
-    noise: 0,
-    cafe: 0,
-  });
-
-  const [mutedChannels, setMutedChannels] = useState({
-    vinyl: false,
-    rain: false,
+  const [playingState, setPlayingState] = useState({
     noise: false,
-    cafe: false,
+    rain: false,
   });
-
-  const [masterMute, setMasterMute] = useState(false);
 
   const channels = [
-    { id: 'vinyl', label: 'Vinyl crackle', icon: Disc },
-    { id: 'rain', label: 'Rain storm', icon: CloudRain },
     { id: 'noise', label: 'White noise', icon: Waves },
-    { id: 'cafe', label: 'Cafe background', icon: Coffee },
+    { id: 'rain', label: 'Rain', icon: CloudRain },
   ];
 
-  const handleVolumeChange = (id, val) => {
-    setVolumes((prev) => ({ ...prev, [id]: val }));
-    if (mutedChannels[id] && val > 0) {
-      setMutedChannels((prev) => ({ ...prev, [id]: false }));
-    }
-    if (!masterMute) {
-      soundSynth.setAmbientVolume(id, val);
-    }
-  };
+  const anyPlaying = Object.values(playingState).some(Boolean);
 
-  const handleToggleMute = (id) => {
+  const handleTogglePlay = (id) => {
     soundSynth.playButtonClick();
-    setMutedChannels((prev) => {
+    setPlayingState((prev) => {
       const next = !prev[id];
-      soundSynth.setAmbientVolume(id, next || masterMute ? 0 : volumes[id]);
+      soundSynth.setAmbientPlaying(id, next);
       return { ...prev, [id]: next };
     });
   };
 
-  const handleToggleMasterMute = () => {
+  const handleStopAll = () => {
     soundSynth.playButtonClick();
-    const nextMaster = !masterMute;
-    setMasterMute(nextMaster);
-    channels.forEach((ch) => {
-      soundSynth.setAmbientVolume(ch.id, nextMaster || mutedChannels[ch.id] ? 0 : volumes[ch.id]);
+    soundSynth.stopAllAmbient();
+    setPlayingState({
+      noise: false,
+      rain: false,
     });
   };
 
@@ -64,21 +43,20 @@ export function AmbientMixer() {
           <span>Ambient Sounds</span>
         </div>
 
-        <button
-          type="button"
-          onClick={handleToggleMasterMute}
-          className={`px-2 py-0.5 border text-[9px] font-mono tracking-wider flex items-center space-x-1 cursor-pointer transition-all ${
-            masterMute
-              ? 'border-[var(--danger)] text-[var(--danger)] bg-[var(--danger)]/10'
-              : 'border-[var(--border-color)] text-[var(--text-dim)] hover:text-[var(--text-primary)]'
-          }`}
-        >
-          {masterMute ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
-          <span>{masterMute ? 'Unmute' : 'Mute all'}</span>
-        </button>
+        {anyPlaying && (
+          <button
+            type="button"
+            onClick={handleStopAll}
+            className="px-2 py-0.5 border border-[var(--border-color)] text-[9px] font-mono tracking-wider flex items-center space-x-1 cursor-pointer transition-all hover:border-[var(--danger)] hover:text-[var(--danger)] text-[var(--text-dim)]"
+            title="Stop all ambient sounds"
+          >
+            <Square className="w-2.5 h-2.5 fill-current" />
+            <span>Stop all</span>
+          </button>
+        )}
       </div>
 
-      {/* 4 Channels */}
+      {/* 2 Channels: White noise and Rain */}
       <div className="space-y-1">
         {channels.map((ch) => (
           <AmbientChannel
@@ -86,10 +64,8 @@ export function AmbientMixer() {
             id={ch.id}
             label={ch.label}
             icon={ch.icon}
-            volume={volumes[ch.id]}
-            isMuted={masterMute || mutedChannels[ch.id]}
-            onVolumeChange={handleVolumeChange}
-            onToggleMute={handleToggleMute}
+            isPlaying={playingState[ch.id]}
+            onTogglePlay={handleTogglePlay}
           />
         ))}
       </div>
