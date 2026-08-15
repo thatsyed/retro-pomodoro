@@ -1,11 +1,17 @@
 import React from 'react';
-import { Check, Trash2, AlertCircle } from 'lucide-react';
+import { Check, Trash2 } from 'lucide-react';
 
 export function TaskItem({ task, onToggle, onDelete }) {
   const priorityColors = {
     low: 'text-[var(--text-dim)] border-[var(--border-color)] bg-[var(--bg-app)]',
     med: 'text-[var(--text-secondary)] border-[var(--border-color)] bg-[var(--bg-app)]',
     high: 'text-[var(--accent)] border-[var(--accent)]/40 bg-[var(--accent)]/10',
+  };
+
+  const priorityLabels = {
+    low: 'Low',
+    med: 'Med',
+    high: 'High',
   };
 
   return (
@@ -43,8 +49,8 @@ export function TaskItem({ task, onToggle, onDelete }) {
 
       <div className="flex items-center space-x-2 shrink-0">
         {/* Priority Badge */}
-        <span className={`text-[9px] font-mono px-1.5 py-0.5 border uppercase tracking-wider ${priorityColors[task.priority] || priorityColors.med}`}>
-          {task.priority}
+        <span className={`text-[9px] font-mono px-1.5 py-0.5 border tracking-wider ${priorityColors[task.priority] || priorityColors.med}`}>
+          {priorityLabels[task.priority] || 'Med'}
         </span>
 
         {/* Delete Button */}

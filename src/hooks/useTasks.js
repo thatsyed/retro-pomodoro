@@ -5,7 +5,7 @@ import { soundSynth } from '../services/soundSynth';
 const INITIAL_TASKS = [
   {
     id: 'task-1',
-    title: 'Initialize workstation focus block',
+    title: 'Initialize workstation focus session',
     completed: true,
     priority: 'high',
     createdAt: Date.now() - 3600000,

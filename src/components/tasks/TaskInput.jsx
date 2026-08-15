@@ -13,6 +13,12 @@ export function TaskInput({ onAddTask }) {
     }
   };
 
+  const priorityLabels = {
+    low: 'Low',
+    med: 'Med',
+    high: 'High',
+  };
+
   return (
     <form onSubmit={handleSubmit} className="mb-3 space-y-2">
       <div className="flex items-center space-x-1.5">
@@ -22,7 +28,7 @@ export function TaskInput({ onAddTask }) {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Add new task (press Enter)..."
+            placeholder="Add a task..."
             className="w-full bg-[var(--bg-app)] border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-dim)] font-mono focus:outline-none focus:border-[var(--text-primary)] focus:shadow-[var(--glow-primary)]"
           />
         </div>
@@ -33,20 +39,20 @@ export function TaskInput({ onAddTask }) {
           title="Add Task"
         >
           <Plus className="w-3.5 h-3.5 mr-1 stroke-[3]" />
-          ADD
+          Add
         </button>
       </div>
 
       {/* Priority Selection Bar */}
       <div className="flex items-center justify-between text-[10px] font-mono text-[var(--text-dim)] pt-0.5">
-        <span className="tracking-wide">PRIORITY:</span>
+        <span className="tracking-wide">Priority:</span>
         <div className="flex items-center space-x-1">
           {['low', 'med', 'high'].map((p) => (
             <button
               key={p}
               type="button"
               onClick={() => setPriority(p)}
-              className={`px-2 py-0.5 border text-[9px] uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-2 py-0.5 border text-[9px] tracking-wider transition-all cursor-pointer ${
                 priority === p
                   ? p === 'high'
                     ? 'border-[var(--accent)] text-[var(--accent)] bg-[var(--accent)]/15 font-bold shadow-[var(--glow-accent)]'
@@ -54,7 +60,7 @@ export function TaskInput({ onAddTask }) {
                   : 'border-[var(--border-color)] text-[var(--text-dim)] hover:text-[var(--text-secondary)]'
               }`}
             >
-              {p}
+              {priorityLabels[p]}
             </button>
           ))}
         </div>

@@ -21,11 +21,11 @@ export function TaskDeck({
         <div className="flex items-center space-x-2">
           <ListTodo className="w-4 h-4 text-[var(--text-primary)]" />
           <h2 className="font-pixel text-xs text-[var(--text-primary)] tracking-wider">
-            TASKS // TODO
+            Tasks
           </h2>
         </div>
         <span className="text-[10px] font-mono text-[var(--text-secondary)] border border-[var(--border-color)] px-1.5 py-0.5 bg-[var(--bg-surface)]">
-          {stats.active} REMAINING
+          {stats.active} active
         </span>
       </div>
 
@@ -46,8 +46,8 @@ export function TaskDeck({
         ) : (
           <div className="flex flex-col items-center justify-center h-36 text-center border border-dashed border-[var(--border-color)] p-4 text-[var(--text-dim)] font-mono text-xs">
             <CheckCircle2 className="w-6 h-6 mb-2 opacity-50 text-[var(--text-secondary)]" />
-            <span>No tasks in this view</span>
-            <span className="text-[10px] text-[var(--text-dim)] mt-1">Press [Alt + T] to add a task</span>
+            <span>No tasks here.</span>
+            <span className="text-[10px] text-[var(--text-dim)] mt-1">Press Alt + T to add one.</span>
           </div>
         )}
       </div>
