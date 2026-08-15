@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, Plus, Clock } from 'lucide-react';
+import { Bell, Plus } from 'lucide-react';
 import { ReminderItem } from './ReminderItem';
 import { AddReminderModal } from './AddReminderModal';
 import { AmbientMixer } from '../ambient/AmbientMixer';
@@ -13,8 +13,6 @@ export function RemindersDeck({
 }) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const activeCount = reminders.filter((r) => r.enabled).length;
-
   return (
     <div className="retro-bezel bg-[var(--bg-deck)] p-4 flex flex-col h-full justify-between">
       {/* Upper Section: Reminders Panel */}
@@ -22,17 +20,17 @@ export function RemindersDeck({
         <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--border-color)]">
           <div className="flex items-center space-x-2 text-[var(--text-primary)]">
             <Bell className="w-4 h-4" />
-            <h2 className="font-pixel text-xs tracking-wider">REMINDERS</h2>
+            <h2 className="font-pixel text-xs tracking-wider">Reminders</h2>
           </div>
 
           <button
             type="button"
             onClick={() => setIsAddModalOpen(true)}
             className="bg-[var(--text-primary)] text-[var(--bg-app)] hover:bg-[var(--text-secondary)] px-2 py-0.5 font-pixel text-[9px] flex items-center space-x-1 cursor-pointer font-bold"
-            title="Create Custom Reminder [Alt + N]"
+            title="Create reminder [Alt + N]"
           >
             <Plus className="w-3 h-3 stroke-[3]" />
-            <span>NEW</span>
+            <span>New</span>
           </button>
         </div>
 
@@ -50,7 +48,7 @@ export function RemindersDeck({
             ))
           ) : (
             <div className="text-center p-3 text-[10px] font-mono text-[var(--text-dim)]">
-              No reminders configured. Click + NEW to add one.
+              No reminders set. Click New to add one.
             </div>
           )}
         </div>

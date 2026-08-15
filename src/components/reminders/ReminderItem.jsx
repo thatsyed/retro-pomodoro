@@ -26,8 +26,8 @@ export function ReminderItem({ reminder, onToggle, onDelete, onReset }) {
               ? 'bg-[var(--text-primary)] border-[var(--text-primary)] text-[var(--bg-app)] shadow-[var(--glow-primary)]'
               : 'bg-[var(--bg-app)] border-[var(--border-color)] text-[var(--text-dim)] hover:border-[var(--text-secondary)]'
           }`}
-          title={reminder.enabled ? 'Disable Reminder' : 'Enable Reminder'}
-          aria-label={reminder.enabled ? 'Disable Reminder' : 'Enable Reminder'}
+          title={reminder.enabled ? 'Disable reminder' : 'Enable reminder'}
+          aria-label={reminder.enabled ? 'Disable reminder' : 'Enable reminder'}
         >
           {reminder.enabled ? <Bell className="w-3.5 h-3.5 fill-current" /> : <BellOff className="w-3.5 h-3.5" />}
         </button>
@@ -38,10 +38,10 @@ export function ReminderItem({ reminder, onToggle, onDelete, onReset }) {
             {reminder.title}
           </div>
           <div className="text-[9px] font-mono text-[var(--text-dim)] flex items-center space-x-2">
-            <span>INTERVAL: {reminder.intervalMinutes}M</span>
+            <span>Every {reminder.intervalMinutes}m</span>
             {reminder.enabled && (
               <span className="text-[var(--accent-secondary)] font-bold">
-                NEXT: {formatTime(reminder.secondsRemaining)}
+                · In {formatTime(reminder.secondsRemaining)}
               </span>
             )}
           </div>
@@ -54,8 +54,8 @@ export function ReminderItem({ reminder, onToggle, onDelete, onReset }) {
           type="button"
           onClick={() => onReset(reminder.id)}
           className="text-[var(--text-dim)] hover:text-[var(--text-secondary)] p-1 transition-colors cursor-pointer"
-          title="Reset timer"
-          aria-label="Reset timer"
+          title="Reset countdown"
+          aria-label="Reset countdown"
         >
           <RotateCcw className="w-3 h-3" />
         </button>

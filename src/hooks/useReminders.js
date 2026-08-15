@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { soundSynth } from '../services/soundSynth';
 import { notificationService } from '../services/notificationService';
@@ -6,28 +6,28 @@ import { notificationService } from '../services/notificationService';
 const DEFAULT_REMINDERS = [
   {
     id: 'rem-water',
-    title: 'Hydration (Drink Water)',
+    title: 'Drink water',
     intervalMinutes: 30,
     enabled: true,
     secondsRemaining: 30 * 60,
   },
   {
     id: 'rem-stretch',
-    title: 'Stretch & Stand Up',
+    title: 'Stretch and move',
     intervalMinutes: 45,
     enabled: true,
     secondsRemaining: 45 * 60,
   },
   {
     id: 'rem-posture',
-    title: 'Posture & Spine Check',
+    title: 'Check posture',
     intervalMinutes: 20,
     enabled: false,
     secondsRemaining: 20 * 60,
   },
   {
     id: 'rem-eyes',
-    title: 'Eye Rest (20-20-20 Rule)',
+    title: 'Rest eyes (20-20-20)',
     intervalMinutes: 20,
     enabled: false,
     secondsRemaining: 20 * 60,
@@ -46,11 +46,10 @@ export function useReminders() {
           if (!rem.enabled) return rem;
           changed = true;
           if (rem.secondsRemaining <= 1) {
-            // Trigger alert!
             soundSynth.playReminderAlarm();
             notificationService.send(
-              `⏰ Reminder: ${rem.title}`,
-              `Time for your ${rem.intervalMinutes}-minute ${rem.title} check!`
+              `Reminder: ${rem.title}`,
+              `Time for your ${rem.intervalMinutes}-minute ${rem.title.toLowerCase()} check!`
             );
             return {
               ...rem,

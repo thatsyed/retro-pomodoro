@@ -24,7 +24,7 @@ export function AmbientChannel({ id, label, icon: Icon, volume, isMuted, onVolum
           value={effectiveVolume}
           onChange={(e) => onVolumeChange(id, parseFloat(e.target.value))}
           className="w-full accent-[var(--text-primary)] h-1 bg-[var(--bg-app)] cursor-pointer"
-          title={`${label} Volume: ${Math.round(effectiveVolume * 100)}%`}
+          title={`${label} volume: ${Math.round(effectiveVolume * 100)}%`}
         />
         <span className="text-[9px] font-mono text-[var(--text-dim)] w-7 text-right">
           {Math.round(effectiveVolume * 100)}%

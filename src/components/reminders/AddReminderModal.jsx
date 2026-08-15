@@ -24,7 +24,7 @@ export function AddReminderModal({ isOpen, onClose, onAddReminder }) {
         <div className="flex items-center justify-between pb-2 mb-3 border-b border-[var(--border-color)]">
           <div className="flex items-center space-x-2 text-[var(--text-primary)]">
             <Clock className="w-4 h-4" />
-            <h3 className="font-pixel text-xs tracking-wider">NEW REMINDER</h3>
+            <h3 className="font-pixel text-xs tracking-wider">New Reminder</h3>
           </div>
           <button
             type="button"
@@ -38,8 +38,8 @@ export function AddReminderModal({ isOpen, onClose, onAddReminder }) {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="reminder-title" className="block text-[10px] font-mono text-[var(--text-dim)] mb-1 uppercase">
-              Reminder Title / Focus Action
+            <label htmlFor="reminder-title" className="block text-[10px] font-mono text-[var(--text-dim)] mb-1">
+              Reminder name
             </label>
             <input
               id="reminder-title"
@@ -47,14 +47,14 @@ export function AddReminderModal({ isOpen, onClose, onAddReminder }) {
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Eye Rest, Drink Water, Stand Up"
+              placeholder="e.g. Drink water, Rest eyes, Stretch"
               className="w-full bg-[var(--bg-app)] border border-[var(--border-color)] px-3 py-2 text-xs text-[var(--text-primary)] font-mono focus:outline-none focus:border-[var(--text-primary)]"
             />
           </div>
 
           <div>
-            <label htmlFor="reminder-interval" className="block text-[10px] font-mono text-[var(--text-dim)] mb-1 uppercase">
-              Repeat Interval (Minutes): {intervalMinutes} min
+            <label htmlFor="reminder-interval" className="block text-[10px] font-mono text-[var(--text-dim)] mb-1">
+              Repeat every (minutes): {intervalMinutes} min
             </label>
             <input
               id="reminder-interval"
@@ -70,7 +70,7 @@ export function AddReminderModal({ isOpen, onClose, onAddReminder }) {
 
           {/* Quick preset buttons */}
           <div className="flex items-center space-x-1.5 text-[10px] font-mono">
-            <span className="text-[var(--text-dim)]">PRESETS:</span>
+            <span className="text-[var(--text-dim)]">Presets:</span>
             {[15, 20, 30, 45, 60].map((m) => (
               <button
                 key={m}
@@ -94,14 +94,14 @@ export function AddReminderModal({ isOpen, onClose, onAddReminder }) {
               onClick={onClose}
               className="px-3 py-1.5 bg-[var(--bg-surface)] text-[var(--text-dim)] border border-[var(--border-color)] hover:text-[var(--text-primary)] font-pixel text-[10px] cursor-pointer"
             >
-              CANCEL
+              Cancel
             </button>
             <button
               type="submit"
               className="px-4 py-1.5 bg-[var(--text-primary)] text-[var(--bg-app)] font-pixel text-[10px] font-bold border border-[var(--text-primary)] shadow-[var(--glow-primary)] cursor-pointer hover:brightness-110 flex items-center space-x-1"
             >
               <Plus className="w-3 h-3 stroke-[3]" />
-              <span>CREATE</span>
+              <span>Create</span>
             </button>
           </div>
         </form>

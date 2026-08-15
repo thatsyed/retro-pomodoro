@@ -21,10 +21,10 @@ export function AmbientMixer() {
   const [masterMute, setMasterMute] = useState(false);
 
   const channels = [
-    { id: 'vinyl', label: 'Vinyl Needle', icon: Disc },
-    { id: 'rain', label: 'Rain Storm', icon: CloudRain },
-    { id: 'noise', label: 'White Noise', icon: Waves },
-    { id: 'cafe', label: 'Cafe Ambience', icon: Coffee },
+    { id: 'vinyl', label: 'Vinyl crackle', icon: Disc },
+    { id: 'rain', label: 'Rain storm', icon: CloudRain },
+    { id: 'noise', label: 'White noise', icon: Waves },
+    { id: 'cafe', label: 'Cafe background', icon: Coffee },
   ];
 
   const handleVolumeChange = (id, val) => {
@@ -61,20 +61,20 @@ export function AmbientMixer() {
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-1.5 text-[var(--text-primary)] font-pixel text-[10px]">
           <Radio className="w-3.5 h-3.5" />
-          <span>AMBIENT SOUNDSCAPES</span>
+          <span>Ambient Sounds</span>
         </div>
 
         <button
           type="button"
           onClick={handleToggleMasterMute}
-          className={`px-2 py-0.5 border text-[9px] font-mono uppercase tracking-wider flex items-center space-x-1 cursor-pointer transition-all ${
+          className={`px-2 py-0.5 border text-[9px] font-mono tracking-wider flex items-center space-x-1 cursor-pointer transition-all ${
             masterMute
               ? 'border-[var(--danger)] text-[var(--danger)] bg-[var(--danger)]/10'
               : 'border-[var(--border-color)] text-[var(--text-dim)] hover:text-[var(--text-primary)]'
           }`}
         >
           {masterMute ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
-          <span>{masterMute ? 'MUTED' : 'MUTE ALL'}</span>
+          <span>{masterMute ? 'Unmute' : 'Mute all'}</span>
         </button>
       </div>
 
