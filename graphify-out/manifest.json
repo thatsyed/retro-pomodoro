@@ -1,0 +1,32 @@
+{
+  "app.js": {
+    "mtime": 1783317047.5838156,
+    "seen": 1786773113.686962,
+    "ast_hash": "641649560ebd65997606a56be44a01e6",
+    "semantic_hash": "641649560ebd65997606a56be44a01e6"
+  },
+  "README.md": {
+    "mtime": 1783318854.3028157,
+    "seen": 1786773113.686967,
+    "ast_hash": "0ee204eb70735c56558880662ace11ea",
+    "semantic_hash": "0ee204eb70735c56558880662ace11ea"
+  },
+  "docs/superpowers/plans/2026-07-06-cozy-pomodoro.md": {
+    "mtime": 1783312382.4832978,
+    "seen": 1786773113.6869688,
+    "ast_hash": "4090432a53884c01e6ff6643c7fce666",
+    "semantic_hash": "4090432a53884c01e6ff6643c7fce666"
+  },
+  "docs/superpowers/specs/2026-07-06-cozy-pomodoro-design.md": {
+    "mtime": 1783312291.4980612,
+    "seen": 1786773113.6869698,
+    "ast_hash": "7a95299184c941aebca0489a85a0432a",
+    "semantic_hash": "7a95299184c941aebca0489a85a0432a"
+  },
+  "index.html": {
+    "mtime": 1783318854.33814,
+    "seen": 1786773113.6869712,
+    "ast_hash": "792f759cdfc7d41a1344d58a784c3e7f",
+    "semantic_hash": "792f759cdfc7d41a1344d58a784c3e7f"
+  }
+}

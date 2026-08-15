@@ -1,6 +1,10 @@
 # Antigravity SDD Workspace
 .superpowers/
 
+# Node & Build
+node_modules/
+dist/
+
 # OS Files
 .DS_Store
 Thumbs.db
