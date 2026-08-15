@@ -27,51 +27,50 @@ export function TaskDeck({
 
   return (
     <section
-      className="console-deck deck-side deck-tasks-panel relative flex flex-col gap-3.5"
+      className="console-deck deck-side deck-tasks-panel h-full flex flex-col gap-3.5"
       id="deck-tasks"
       aria-labelledby="deck-tasks-title"
     >
-      <span className="chassis-screw screw-tl" />
-      <span className="chassis-screw screw-tr" />
-      <span className="chassis-screw screw-bl" />
-      <span className="chassis-screw screw-br" />
-
       {/* Deck Header */}
       <div className="flex justify-between items-center border-b-2 border-dashed border-[var(--color-border)] pb-2.5">
         <div className="flex items-center gap-2">
           <SvgIcon name="CheckSquare" size={18} className="text-[var(--color-border)]" />
           <h2 id="deck-tasks-title" className="font-['VT323',monospace] text-2xl tracking-wider text-[var(--color-border)]">
-            TASK LOG
+            TASKS
           </h2>
         </div>
         <span className="font-['VT323',monospace] text-lg bg-[var(--color-screen-bg)] text-[var(--color-screen-glow)] border border-[var(--color-border)] px-2 py-0.5 rounded-xs tabular-nums">
-          {stats.done}/{stats.total} DONE
+          {stats.done}/{stats.total}
         </span>
       </div>
 
       {/* CRT Screen Panel */}
-      <div className="deck-screen flex flex-col gap-3 min-h-[480px]">
+      <div className="deck-screen flex-1 flex flex-col min-h-0 gap-3">
         {/* Progress Bar */}
         <ProgressBar percentage={stats.percentage} />
 
         {/* Filter Bar */}
         <div className="flex justify-between items-center border-b border-white/10 pb-2 z-[6]">
           <div className="flex gap-1" role="tablist" aria-label="Task filters">
-            {['all', 'active', 'done'].map((f) => {
-              const isActive = filter === f;
+            {[
+              { id: 'all', label: 'ALL' },
+              { id: 'active', label: 'ACTIVE' },
+              { id: 'done', label: 'DONE' }
+            ].map(({ id, label }) => {
+              const isActive = filter === id;
               return (
                 <button
-                  key={f}
+                  key={id}
                   role="tab"
                   aria-selected={isActive}
-                  onClick={() => onSetFilter(f)}
+                  onClick={() => onSetFilter(id)}
                   className={`font-mono text-xs font-bold py-1 px-2 rounded-xs uppercase cursor-pointer transition-all ${
                     isActive
                       ? 'text-[var(--color-screen-glow)] bg-white/10 font-bold'
                       : 'text-[var(--color-screen-text)] opacity-60 hover:opacity-100 hover:bg-white/5'
                   }`}
                 >
-                  {f}
+                  {label}
                 </button>
               );
             })}
@@ -81,7 +80,7 @@ export function TaskDeck({
             onClick={onClearDone}
             className="font-mono text-[10px] text-[var(--color-danger)] border border-white/15 py-0.5 px-1.5 rounded-xs hover:bg-[var(--color-danger)] hover:text-white transition-colors cursor-pointer"
           >
-            CLEAR DONE
+            CLEAR
           </button>
         </div>
 
@@ -92,7 +91,7 @@ export function TaskDeck({
               type="text"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="New focus task..."
+              placeholder="New task..."
               maxLength={70}
               required
               className="retro-input text-xs py-1.5 px-2 bg-white border-2 border-[var(--color-border)] rounded-[var(--btn-radius)] font-mono text-[var(--color-border)] flex-1 focus:outline-none"
@@ -114,10 +113,8 @@ export function TaskDeck({
           </RetroButton>
         </form>
 
-        {/* Task List */}
-        <div className="flex-1 flex flex-col">
-          <TaskList todos={todos} onToggleTodo={onToggleTodo} onDeleteTodo={onDeleteTodo} />
-        </div>
+        {/* Task List (expands to fill remaining height) */}
+        <TaskList todos={todos} onToggleTodo={onToggleTodo} onDeleteTodo={onDeleteTodo} />
       </div>
     </section>
   );
