@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Settings, Bell, Clock, Volume2 } from 'lucide-react';
+import { X, Settings, Bell, Clock } from 'lucide-react';
 import { notificationService } from '../../services/notificationService';
 import { soundSynth } from '../../services/soundSynth';
 
@@ -47,7 +47,7 @@ export function SettingsModal({
         <div className="flex items-center justify-between pb-2 mb-4 border-b border-[var(--border-color)]">
           <div className="flex items-center space-x-2 text-[var(--text-primary)]">
             <Settings className="w-4 h-4" />
-            <h3 className="font-pixel text-xs tracking-wider">SYSTEM CONFIGURATION</h3>
+            <h3 className="font-pixel text-xs tracking-wider">Settings</h3>
           </div>
           <button
             type="button"
@@ -64,13 +64,13 @@ export function SettingsModal({
           <div>
             <div className="flex items-center space-x-1.5 text-[var(--text-primary)] font-bold mb-2">
               <Clock className="w-3.5 h-3.5" />
-              <span>TIMER INTERVALS (MINUTES)</span>
+              <span>Timer durations (minutes)</span>
             </div>
 
             <div className="grid grid-cols-3 gap-2">
               <div className="p-2 bg-[var(--bg-surface)] border border-[var(--border-color)]">
-                <label htmlFor="setting-focus-mins" className="block text-[9px] text-[var(--text-dim)] mb-1 uppercase">
-                  Focus Work
+                <label htmlFor="setting-focus-mins" className="block text-[9px] text-[var(--text-dim)] mb-1">
+                  Focus
                 </label>
                 <input
                   id="setting-focus-mins"
@@ -84,8 +84,8 @@ export function SettingsModal({
               </div>
 
               <div className="p-2 bg-[var(--bg-surface)] border border-[var(--border-color)]">
-                <label htmlFor="setting-short-break-mins" className="block text-[9px] text-[var(--text-dim)] mb-1 uppercase">
-                  Short Break
+                <label htmlFor="setting-short-break-mins" className="block text-[9px] text-[var(--text-dim)] mb-1">
+                  Short break
                 </label>
                 <input
                   id="setting-short-break-mins"
@@ -99,8 +99,8 @@ export function SettingsModal({
               </div>
 
               <div className="p-2 bg-[var(--bg-surface)] border border-[var(--border-color)]">
-                <label htmlFor="setting-long-break-mins" className="block text-[9px] text-[var(--text-dim)] mb-1 uppercase">
-                  Long Break
+                <label htmlFor="setting-long-break-mins" className="block text-[9px] text-[var(--text-dim)] mb-1">
+                  Long break
                 </label>
                 <input
                   id="setting-long-break-mins"
@@ -118,11 +118,11 @@ export function SettingsModal({
           {/* Section 2: Automation Toggles */}
           <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-color)] space-y-2">
             <div className="text-[10px] text-[var(--text-primary)] font-bold mb-1">
-              AUTOMATION PREFERENCES
+              Automation
             </div>
 
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-[11px] text-[var(--text-dim)]">Auto-start Breaks after Focus</span>
+              <span className="text-[11px] text-[var(--text-dim)]">Auto-start breaks after focus</span>
               <input
                 type="checkbox"
                 checked={autoStartBreaks}
@@ -132,7 +132,7 @@ export function SettingsModal({
             </label>
 
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-[11px] text-[var(--text-dim)]">Auto-start Focus after Break</span>
+              <span className="text-[11px] text-[var(--text-dim)]">Auto-start focus after breaks</span>
               <input
                 type="checkbox"
                 checked={autoStartPomodoros}
@@ -147,9 +147,9 @@ export function SettingsModal({
             <div className="flex items-center space-x-2">
               <Bell className="w-4 h-4 text-[var(--text-primary)]" />
               <div>
-                <div className="text-[11px] text-[var(--text-primary)] font-bold">DESKTOP NOTIFICATIONS</div>
+                <div className="text-[11px] text-[var(--text-primary)] font-bold">Desktop notifications</div>
                 <div className="text-[9px] text-[var(--text-dim)]">
-                  {notifState ? 'Status: Granted & Active' : 'Status: Permission required'}
+                  {notifState ? 'Status: Active' : 'Status: Permission required'}
                 </div>
               </div>
             </div>
@@ -160,7 +160,7 @@ export function SettingsModal({
                 onClick={handleRequestNotif}
                 className="px-3 py-1 bg-[var(--text-primary)] text-[var(--bg-app)] font-pixel text-[9px] font-bold cursor-pointer hover:brightness-110"
               >
-                ENABLE
+                Enable
               </button>
             )}
           </div>
@@ -172,13 +172,13 @@ export function SettingsModal({
               onClick={onClose}
               className="px-3 py-1.5 bg-[var(--bg-surface)] text-[var(--text-dim)] border border-[var(--border-color)] hover:text-[var(--text-primary)] font-pixel text-[10px] cursor-pointer"
             >
-              CANCEL
+              Cancel
             </button>
             <button
               type="submit"
               className="px-4 py-1.5 bg-[var(--text-primary)] text-[var(--bg-app)] font-pixel text-[10px] font-bold border border-[var(--text-primary)] shadow-[var(--glow-primary)] cursor-pointer hover:brightness-110"
             >
-              SAVE CONFIG
+              Save settings
             </button>
           </div>
         </form>

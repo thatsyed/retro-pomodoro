@@ -115,17 +115,17 @@ export default function App() {
         {/* Bottom Keyboard Shortcuts Strip */}
         <footer className="mt-4 p-2 bg-[var(--bg-deck)] retro-bezel flex flex-wrap items-center justify-between text-[10px] text-[var(--text-dim)] font-mono">
           <div className="flex items-center space-x-3 overflow-x-auto py-0.5">
-            <span>HOTKEYS:</span>
+            <span>Shortcuts:</span>
             <span><strong className="text-[var(--text-primary)]">[Space]</strong> Start/Pause</span>
             <span><strong className="text-[var(--text-primary)]">[Alt+S]</strong> Skip</span>
             <span><strong className="text-[var(--text-primary)]">[Alt+R]</strong> Reset</span>
-            <span><strong className="text-[var(--text-primary)]">[Alt+M]</strong> Tape Mute</span>
-            <span><strong className="text-[var(--text-primary)]">[Alt+T]</strong> New Task</span>
-            <span><strong className="text-[var(--text-primary)]">[Alt+C]</strong> CRT Shader</span>
-            <span><strong className="text-[var(--text-primary)]">[Alt+K]</strong> Cheat-sheet</span>
+            <span><strong className="text-[var(--text-primary)]">[Alt+M]</strong> Mute</span>
+            <span><strong className="text-[var(--text-primary)]">[Alt+T]</strong> Add Task</span>
+            <span><strong className="text-[var(--text-primary)]">[Alt+C]</strong> CRT</span>
+            <span><strong className="text-[var(--text-primary)]">[Alt+K]</strong> Help</span>
           </div>
           <div className="text-[9px] text-[var(--text-dim)] tracking-wider">
-            RETRO POMODORO // v2.0
+            Retro Pomodoro
           </div>
         </footer>
       </div>

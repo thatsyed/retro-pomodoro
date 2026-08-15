@@ -9,10 +9,10 @@ export function useTabTitleSync(timeLeft, mode, isRunning) {
     const modeLabel = mode === 'work' ? 'Focus' : mode === 'shortBreak' ? 'Short Break' : 'Long Break';
     
     if (timeLeft === 0) {
-      document.title = `(🔔 COMPLETE!) Time's Up // Retro Pomodoro`;
+      document.title = `(Complete) Time for a break! · Retro Pomodoro`;
     } else {
-      const statusPrefix = isRunning ? `[${mins}:${secs}]` : `[PAUSED ${mins}:${secs}]`;
-      document.title = `${statusPrefix} ${modeLabel} // Retro Pomodoro`;
+      const statusPrefix = isRunning ? `[${mins}:${secs}]` : `[Paused ${mins}:${secs}]`;
+      document.title = `${statusPrefix} ${modeLabel} · Retro Pomodoro`;
     }
   }, [timeLeft, mode, isRunning]);
 }

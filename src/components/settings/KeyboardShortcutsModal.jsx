@@ -5,15 +5,15 @@ export function KeyboardShortcutsModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   const shortcuts = [
-    { key: 'Space', desc: 'Start / Pause Pomodoro Timer' },
-    { key: 'Alt + S', desc: 'Skip to next Timer period (Work ↔ Break)' },
+    { key: 'Space', desc: 'Start / Pause timer' },
+    { key: 'Alt + S', desc: 'Skip to next period (Focus ↔ Break)' },
     { key: 'Alt + R', desc: 'Reset current countdown' },
-    { key: 'Alt + M', desc: 'Master Audio Mute / Unmute' },
-    { key: 'Alt + T', desc: 'Focus New Task input field' },
-    { key: 'Alt + N', desc: 'Open New Reminder creator' },
-    { key: 'Alt + C', desc: 'Toggle CRT Scanlines & Glow shaders' },
-    { key: 'Alt + K', desc: 'Open Keyboard Shortcuts cheat-sheet' },
-    { key: 'Esc', desc: 'Close open dialogs & modals' },
+    { key: 'Alt + M', desc: 'Mute / Unmute music tape' },
+    { key: 'Alt + T', desc: 'Focus add task input' },
+    { key: 'Alt + N', desc: 'Open new reminder creator' },
+    { key: 'Alt + C', desc: 'Toggle CRT scanlines & glow' },
+    { key: 'Alt + K', desc: 'Open shortcuts cheat-sheet' },
+    { key: 'Esc', desc: 'Close open dialogs' },
   ];
 
   return (
@@ -22,7 +22,7 @@ export function KeyboardShortcutsModal({ isOpen, onClose }) {
         <div className="flex items-center justify-between pb-2 mb-3 border-b border-[var(--border-color)]">
           <div className="flex items-center space-x-2 text-[var(--text-primary)]">
             <Keyboard className="w-4 h-4" />
-            <h3 className="font-pixel text-xs tracking-wider">KEYBOARD SHORTCUTS</h3>
+            <h3 className="font-pixel text-xs tracking-wider">Keyboard Shortcuts</h3>
           </div>
           <button
             type="button"
@@ -52,7 +52,7 @@ export function KeyboardShortcutsModal({ isOpen, onClose }) {
             onClick={onClose}
             className="px-4 py-1.5 bg-[var(--text-primary)] text-[var(--bg-app)] font-pixel text-[10px] font-bold cursor-pointer hover:brightness-110"
           >
-            CLOSE [Esc]
+            Close [Esc]
           </button>
         </div>
       </div>
