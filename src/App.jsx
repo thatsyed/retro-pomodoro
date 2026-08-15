@@ -1,16 +1,152 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { HeaderBar } from './components/header/HeaderBar';
+import { TaskDeck } from './components/tasks/TaskDeck';
+import { HeroTimerDeck } from './components/timer/HeroTimerDeck';
+import { RemindersDeck } from './components/reminders/RemindersDeck';
+import { CrtOverlay } from './components/crt/CrtOverlay';
+import { SettingsModal } from './components/settings/SettingsModal';
+import { KeyboardShortcutsModal } from './components/settings/KeyboardShortcutsModal';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { useTimer } from './hooks/useTimer';
+import { useTasks } from './hooks/useTasks';
+import { useReminders } from './hooks/useReminders';
+import { useTabTitleSync } from './hooks/useTabTitleSync';
+import { useKeyboardHotkeys } from './hooks/useKeyboardHotkeys';
 
 export default function App() {
+  // Theme & CRT state
+  const [theme, setTheme] = useLocalStorage('rp_theme', 'cyberpunk');
+  const [crtEnabled, setCrtEnabled] = useLocalStorage('rp_crt_enabled', true);
+
+  // Modals state
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+
+  // Timer State & Controls
+  const timer = useTimer();
+
+  // Task State & Controls
+  const taskStore = useTasks();
+
+  // Reminders State & Controls
+  const reminderStore = useReminders();
+
+  // Dynamic Browser Tab Title Synchronizer
+  useTabTitleSync(timer.timeLeft, timer.mode, timer.isRunning);
+
+  // Sync active theme to html tag
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  // Global Keyboard Shortcuts
+  useKeyboardHotkeys({
+    onToggleTimer: timer.toggle,
+    onSkipTimer: timer.skip,
+    onResetTimer: timer.reset,
+    onToggleCrt: () => setCrtEnabled((prev) => !prev),
+    onOpenShortcuts: () => setIsShortcutsOpen(true),
+    onCloseModals: () => {
+      setIsSettingsOpen(false);
+      setIsShortcutsOpen(false);
+    },
+  });
+
   return (
-    <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-primary)] p-4 flex items-center justify-center">
-      <div className="retro-bezel p-6 bg-[var(--bg-deck)] max-w-lg text-center">
-        <h1 className="font-pixel text-lg text-[var(--text-primary)] glow-text mb-2">
-          RETRO POMODORO // v2.0
-        </h1>
-        <p className="font-mono text-xs text-[var(--text-dim)]">
-          8-Bit Cyberpunk Workstation Scaffolding Active
-        </p>
+    <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-primary)] font-mono flex flex-col justify-between p-3 sm:p-5 relative">
+      {/* CRT Scanlines and Phosphor Glow Overlay */}
+      <CrtOverlay enabled={crtEnabled} />
+
+      <div className="max-w-7xl w-full mx-auto flex-1 flex flex-col">
+        {/* Top Console Navigation Bar */}
+        <HeaderBar
+          currentTheme={theme}
+          onThemeChange={setTheme}
+          crtEnabled={crtEnabled}
+          onToggleCrt={() => setCrtEnabled((prev) => !prev)}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          onOpenShortcuts={() => setIsShortcutsOpen(true)}
+        />
+
+        {/* 3-Deck Console Cockpit Layout */}
+        <main className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1 items-stretch">
+          {/* Left Deck: Tasks & Todo Manager (3 cols) */}
+          <section className="lg:col-span-3 flex flex-col">
+            <TaskDeck
+              tasks={taskStore.tasks}
+              filter={taskStore.filter}
+              onFilterChange={taskStore.setFilter}
+              onAddTask={taskStore.addTask}
+              onToggleTask={taskStore.toggleTask}
+              onDeleteTask={taskStore.deleteTask}
+              onClearCompleted={taskStore.clearCompleted}
+              stats={taskStore.stats}
+            />
+          </section>
+
+          {/* Center Hero Deck: Digital Pomodoro Display & Lo-Fi Cassette Player (6 cols) */}
+          <section className="lg:col-span-6 flex flex-col">
+            <HeroTimerDeck
+              mode={timer.mode}
+              timeLeft={timer.timeLeft}
+              totalDuration={timer.totalDuration}
+              isRunning={timer.isRunning}
+              completedSessions={timer.completedSessions}
+              durations={timer.durations}
+              onToggle={timer.toggle}
+              onSkip={timer.skip}
+              onReset={timer.reset}
+              onChangeMode={timer.changeMode}
+            />
+          </section>
+
+          {/* Right Deck: Reminders & Ambient Soundscape Mixer (3 cols) */}
+          <section className="lg:col-span-3 flex flex-col">
+            <RemindersDeck
+              reminders={reminderStore.reminders}
+              onToggleReminder={reminderStore.toggleReminder}
+              onAddReminder={reminderStore.addReminder}
+              onDeleteReminder={reminderStore.deleteReminder}
+              onResetReminder={reminderStore.resetReminder}
+            />
+          </section>
+        </main>
+
+        {/* Bottom Keyboard Shortcuts Strip */}
+        <footer className="mt-4 p-2 bg-[var(--bg-deck)] retro-bezel flex flex-wrap items-center justify-between text-[10px] text-[var(--text-dim)] font-mono">
+          <div className="flex items-center space-x-3 overflow-x-auto py-0.5">
+            <span>HOTKEYS:</span>
+            <span><strong className="text-[var(--text-primary)]">[Space]</strong> Start/Pause</span>
+            <span><strong className="text-[var(--text-primary)]">[Alt+S]</strong> Skip</span>
+            <span><strong className="text-[var(--text-primary)]">[Alt+R]</strong> Reset</span>
+            <span><strong className="text-[var(--text-primary)]">[Alt+M]</strong> Tape Mute</span>
+            <span><strong className="text-[var(--text-primary)]">[Alt+T]</strong> New Task</span>
+            <span><strong className="text-[var(--text-primary)]">[Alt+C]</strong> CRT Shader</span>
+            <span><strong className="text-[var(--text-primary)]">[Alt+K]</strong> Cheat-sheet</span>
+          </div>
+          <div className="text-[9px] text-[var(--text-dim)] tracking-wider">
+            RETRO POMODORO // v2.0
+          </div>
+        </footer>
       </div>
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        durations={timer.durations}
+        onSaveDurations={timer.setDurations}
+        autoStartBreaks={timer.autoStartBreaks}
+        onToggleAutoBreaks={timer.setAutoStartBreaks}
+        autoStartPomodoros={timer.autoStartPomodoros}
+        onToggleAutoPomodoros={timer.setAutoStartPomodoros}
+      />
+
+      {/* Keyboard Shortcuts Modal */}
+      <KeyboardShortcutsModal
+        isOpen={isShortcutsOpen}
+        onClose={() => setIsShortcutsOpen(false)}
+      />
     </div>
   );
 }
