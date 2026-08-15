@@ -20,11 +20,20 @@ export function useTimer() {
 
   const timerRef = useRef(null);
 
-  // Sync timeLeft when durations or mode change while paused
+  const prevDurationsRef = useRef(durations);
+  const prevModeRef = useRef(mode);
+
+  // Sync timeLeft only when durations configuration or mode actually change while idle
   useEffect(() => {
-    if (!isRunning) {
+    const durationsChanged = prevDurationsRef.current !== durations;
+    const modeChanged = prevModeRef.current !== mode;
+
+    if (!isRunning && (durationsChanged || modeChanged)) {
       setTimeLeft((durations[mode] || 25) * 60);
     }
+
+    prevDurationsRef.current = durations;
+    prevModeRef.current = mode;
   }, [mode, durations, isRunning]);
 
   const handleComplete = useCallback(() => {

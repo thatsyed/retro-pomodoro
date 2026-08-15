@@ -15,7 +15,7 @@ import { useKeyboardHotkeys } from './hooks/useKeyboardHotkeys';
 
 export default function App() {
   // Theme & CRT state
-  const [theme, setTheme] = useLocalStorage('rp_theme', 'cyberpunk');
+  const [theme, setTheme] = useLocalStorage('rp_theme', 'classic');
   const [crtEnabled, setCrtEnabled] = useLocalStorage('rp_crt_enabled', true);
 
   // Modals state

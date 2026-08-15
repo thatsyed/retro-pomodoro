@@ -4,11 +4,11 @@ import { soundSynth } from '../../services/soundSynth';
 
 export function ThemeSelector({ currentTheme, onThemeChange }) {
   const themes = [
+    { id: 'classic', name: 'Classic' },
     { id: 'cyberpunk', name: 'Cyberpunk' },
     { id: 'amber', name: 'Amber' },
     { id: 'matrix', name: 'Matrix' },
     { id: 'synthwave', name: 'Synthwave' },
-    { id: 'classic', name: 'Classic' },
   ];
 
   const handleSelect = (e) => {

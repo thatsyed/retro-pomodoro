@@ -1,6 +1,22 @@
 @import "tailwindcss";
 
-:root, :root[data-theme="cyberpunk"] {
+:root, :root[data-theme="classic"] {
+  --bg-app: #14110f;
+  --bg-surface: #1e1916;
+  --bg-deck: #28221e;
+  --border-color: #3d342d;
+  --border-highlight: #63554b;
+  --text-primary: #e6c280;
+  --text-secondary: #c29d5b;
+  --text-dim: #7d6e64;
+  --accent: #d97736;
+  --accent-secondary: #e0bb43;
+  --danger: #d94b4b;
+  --glow-primary: 0 0 8px rgba(230, 194, 128, 0.35);
+  --glow-accent: 0 0 8px rgba(217, 119, 54, 0.35);
+}
+
+:root[data-theme="cyberpunk"] {
   --bg-app: #08080f;
   --bg-surface: #100f1e;
   --bg-deck: #151329;
@@ -62,22 +78,6 @@
   --danger: #ff3864;
   --glow-primary: 0 0 10px rgba(224, 170, 255, 0.4), 0 0 20px rgba(224, 170, 255, 0.15);
   --glow-accent: 0 0 10px rgba(255, 113, 206, 0.45), 0 0 20px rgba(255, 113, 206, 0.2);
-}
-
-:root[data-theme="classic"] {
-  --bg-app: #14110f;
-  --bg-surface: #1e1916;
-  --bg-deck: #28221e;
-  --border-color: #3d342d;
-  --border-highlight: #63554b;
-  --text-primary: #e6c280;
-  --text-secondary: #c29d5b;
-  --text-dim: #7d6e64;
-  --accent: #d97736;
-  --accent-secondary: #e0bb43;
-  --danger: #d94b4b;
-  --glow-primary: 0 0 8px rgba(230, 194, 128, 0.35);
-  --glow-accent: 0 0 8px rgba(217, 119, 54, 0.35);
 }
 
 .font-vt323 { font-family: 'VT323', monospace; }
