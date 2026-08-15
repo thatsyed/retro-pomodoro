@@ -1,0 +1,34 @@
+.cassette-shell {
+  background: linear-gradient(180deg, #181528 0%, #0d0a17 100%);
+  border: 2px solid var(--border-color);
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1), inset -1px -1px 0 rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.6);
+}
+
+.tape-window {
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid var(--border-color);
+  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.tape-reel {
+  transform-origin: center;
+}
+
+.tape-reel.spinning {
+  animation: reelSpin 2s linear infinite;
+}
+
+.tape-reel.spinning-reverse {
+  animation: reelSpin 2s linear infinite reverse;
+}
+
+@keyframes reelSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.magnetic-tape {
+  height: 2px;
+  background: #5c3a21;
+  box-shadow: 0 0 2px rgba(92, 58, 33, 0.6);
+}

@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+:root, :root[data-theme="cyberpunk"] {
+  --bg-app: #08080f;
+  --bg-surface: #100f1e;
+  --bg-deck: #151329;
+  --border-color: #2b2353;
+  --border-highlight: #4d3a94;
+  --text-primary: #00ffcc;
+  --text-secondary: #00b392;
+  --text-dim: #5a748c;
+  --accent: #ff007f;
+  --accent-secondary: #ffe600;
+  --danger: #ff3366;
+  --glow-primary: 0 0 10px rgba(0, 255, 204, 0.4), 0 0 20px rgba(0, 255, 204, 0.15);
+  --glow-accent: 0 0 10px rgba(255, 0, 127, 0.4), 0 0 20px rgba(255, 0, 127, 0.15);
+}
+
+:root[data-theme="amber"] {
+  --bg-app: #0d0903;
+  --bg-surface: #171107;
+  --bg-deck: #21190c;
+  --border-color: #3b2c14;
+  --border-highlight: #6e5225;
+  --text-primary: #ffb000;
+  --text-secondary: #d99100;
+  --text-dim: #7a633c;
+  --accent: #ff6600;
+  --accent-secondary: #ffd000;
+  --danger: #ff3b30;
+  --glow-primary: 0 0 10px rgba(255, 176, 0, 0.45), 0 0 20px rgba(255, 176, 0, 0.2);
+  --glow-accent: 0 0 10px rgba(255, 102, 0, 0.45), 0 0 20px rgba(255, 102, 0, 0.2);
+}
+
+:root[data-theme="matrix"] {
+  --bg-app: #020b05;
+  --bg-surface: #06170b;
+  --bg-deck: #0a2110;
+  --border-color: #13401f;
+  --border-highlight: #227037;
+  --text-primary: #33ff66;
+  --text-secondary: #24b848;
+  --text-dim: #437a52;
+  --accent: #00ffaa;
+  --accent-secondary: #bbff33;
+  --danger: #ff3344;
+  --glow-primary: 0 0 10px rgba(51, 255, 102, 0.45), 0 0 20px rgba(51, 255, 102, 0.2);
+  --glow-accent: 0 0 10px rgba(0, 255, 170, 0.45), 0 0 20px rgba(0, 255, 170, 0.2);
+}
+
+:root[data-theme="synthwave"] {
+  --bg-app: #0e0717;
+  --bg-surface: #180d29;
+  --bg-deck: #22133a;
+  --border-color: #3f1e68;
+  --border-highlight: #6e37b3;
+  --text-primary: #e0aaff;
+  --text-secondary: #c77dff;
+  --text-dim: #7b6299;
+  --accent: #ff71ce;
+  --accent-secondary: #01cdfe;
+  --danger: #ff3864;
+  --glow-primary: 0 0 10px rgba(224, 170, 255, 0.4), 0 0 20px rgba(224, 170, 255, 0.15);
+  --glow-accent: 0 0 10px rgba(255, 113, 206, 0.45), 0 0 20px rgba(255, 113, 206, 0.2);
+}
+
+:root[data-theme="classic"] {
+  --bg-app: #14110f;
+  --bg-surface: #1e1916;
+  --bg-deck: #28221e;
+  --border-color: #3d342d;
+  --border-highlight: #63554b;
+  --text-primary: #e6c280;
+  --text-secondary: #c29d5b;
+  --text-dim: #7d6e64;
+  --accent: #d97736;
+  --accent-secondary: #e0bb43;
+  --danger: #d94b4b;
+  --glow-primary: 0 0 8px rgba(230, 194, 128, 0.35);
+  --glow-accent: 0 0 8px rgba(217, 119, 54, 0.35);
+}
+
+.font-vt323 { font-family: 'VT323', monospace; }
+.font-pixel { font-family: 'Press Start 2P', monospace; }
+.font-mono { font-family: 'JetBrains Mono', 'Courier Prime', monospace; }
+
+.retro-bezel {
+  border: 2px solid var(--border-color);
+  box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.1), inset -1px -1px 0px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.retro-panel-inset {
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.6), inset -1px -1px 0px rgba(255,255,255,0.05);
+}
+
+.glow-text {
+  text-shadow: var(--glow-primary);
+}
+
+.glow-accent-text {
+  text-shadow: var(--glow-accent);
+}
+
+/* Custom Scrollbar for retro vibe */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-highlight);
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
