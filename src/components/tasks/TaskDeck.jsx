@@ -35,7 +35,7 @@ export function TaskDeck({
         <TaskInput onAddTask={onAddTask} minimal />
 
         {/* Task List (Scrollable) */}
-        <div className="flex-1 min-h-[120px] overflow-y-auto space-y-1.5 pr-1">
+        <div className="flex-1 min-h-[120px] max-h-[320px] lg:max-h-none overflow-y-auto space-y-1.5 pr-1">
           {tasks.length > 0 ? (
             tasks.map((task) => (
               <TaskItem
@@ -68,7 +68,7 @@ export function TaskDeck({
   }
 
   return (
-    <div className="retro-bezel bg-[var(--bg-deck)] p-4 flex flex-col h-full">
+    <div className="retro-bezel bg-[var(--bg-deck)] p-4 flex flex-col lg:h-full">
       {/* Deck Header */}
       <div className="flex items-center justify-between pb-2 mb-3 border-b border-[var(--border-color)]">
         <div className="flex items-center space-x-2">
@@ -86,16 +86,16 @@ export function TaskDeck({
       <TaskInput onAddTask={onAddTask} />
 
       {/* Task List (Scrollable) */}
-      <div className="flex-1 min-h-[120px] overflow-y-auto space-y-1 pr-1">
+      <div className="flex-1 min-h-[120px] max-h-[320px] lg:max-h-none overflow-y-auto space-y-1 pr-1">
         {tasks.length > 0 ? (
           tasks.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              onToggle={onToggleTask}
-              onDelete={onDeleteTask}
-            />
-          ))
+              <TaskItem
+                key={task.id}
+                task={task}
+                onToggle={onToggleTask}
+                onDelete={onDeleteTask}
+              />
+            ))
         ) : (
           <div className="flex flex-col items-center justify-center h-36 text-center border border-dashed border-[var(--border-color)] p-4 text-[var(--text-dim)] font-mono text-xs">
             <CheckCircle2 className="w-6 h-6 mb-2 opacity-50 text-[var(--text-secondary)]" />

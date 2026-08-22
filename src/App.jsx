@@ -55,11 +55,11 @@ export default function App() {
   const minimal = theme === 'minimal';
 
   return (
-    <div className={`h-screen overflow-hidden bg-[var(--bg-app)] text-[var(--text-primary)] flex flex-col justify-between p-3 sm:p-4 relative ${minimal ? 'font-sans' : 'font-mono'}`}>
+    <div className={`min-h-[100dvh] lg:h-screen lg:overflow-hidden bg-[var(--bg-app)] text-[var(--text-primary)] flex flex-col p-3 sm:p-4 relative ${minimal ? 'font-sans' : 'font-mono'}`}>
       {/* CRT Scanlines and Phosphor Glow Overlay */}
       <CrtOverlay enabled={crtEnabled && !minimal} />
 
-      <div className="max-w-7xl w-full mx-auto flex-1 min-h-0 flex flex-col">
+      <div className="max-w-7xl w-full mx-auto flex-1 min-h-0 flex flex-col lg:overflow-hidden">
         {/* Top Console Navigation Bar */}
         <HeaderBar
           currentTheme={theme}
@@ -71,9 +71,9 @@ export default function App() {
         />
 
         {/* 3-Deck Console Cockpit Layout */}
-        <main className="grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)] gap-3 flex-1 min-h-0 items-stretch content-start overflow-y-auto lg:content-normal">
-          {/* Left Deck: Tasks & Todo Manager (3 cols) */}
-          <section className="lg:col-span-3 flex flex-col min-h-0">
+        <main className="flex flex-col gap-4 lg:gap-3 lg:grid lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)] flex-1 min-h-0 lg:items-stretch overflow-visible lg:overflow-y-auto">
+          {/* Left Deck: Tasks & Todo Manager (3 cols) — second on mobile, left on desktop */}
+          <section className="order-2 lg:order-none lg:col-span-3 flex flex-col lg:min-h-0 shrink-0 lg:shrink">
             <TaskDeck
               tasks={taskStore.tasks}
               filter={taskStore.filter}
@@ -87,8 +87,8 @@ export default function App() {
             />
           </section>
 
-          {/* Center Hero Deck: Digital Pomodoro Display & Lo-Fi Cassette Player (6 cols) */}
-          <section className="lg:col-span-6 flex flex-col min-h-0">
+          {/* Center Hero Deck: Digital Pomodoro Display & Lo-Fi Cassette Player (6 cols) — first on mobile */}
+          <section className="order-1 lg:order-none lg:col-span-6 flex flex-col lg:min-h-0 shrink-0 lg:shrink">
             <HeroTimerDeck
               mode={timer.mode}
               timeLeft={timer.timeLeft}
@@ -105,7 +105,7 @@ export default function App() {
           </section>
 
           {/* Right Deck: Reminders & Ambient Soundscape Mixer (3 cols) */}
-          <section className="lg:col-span-3 flex flex-col min-h-0">
+          <section className="order-3 lg:order-none lg:col-span-3 flex flex-col lg:min-h-0 shrink-0 lg:shrink">
             <RemindersDeck
               reminders={reminderStore.reminders}
               onToggleReminder={reminderStore.toggleReminder}
@@ -119,7 +119,7 @@ export default function App() {
 
         {/* Bottom Keyboard Shortcuts Strip */}
         {minimal ? (
-          <footer className="mt-3 shrink-0 p-3 rounded-2xl border border-border bg-card flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground">
+          <footer className="hidden lg:flex mt-3 shrink-0 p-3 rounded-2xl border border-border bg-card flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground">
             <div className="flex items-center gap-4 overflow-x-auto py-0.5">
               <span><kbd className="font-medium text-foreground">Space</kbd> Start/Pause</span>
               <span><kbd className="font-medium text-foreground">Alt+S</kbd> Skip</span>
@@ -134,7 +134,7 @@ export default function App() {
             </div>
           </footer>
         ) : (
-          <footer className="mt-3 shrink-0 p-2 bg-[var(--bg-deck)] retro-bezel flex flex-wrap items-center justify-between text-[10px] text-[var(--text-dim)] font-mono">
+          <footer className="hidden lg:flex mt-3 shrink-0 p-2 bg-[var(--bg-deck)] retro-bezel flex-wrap items-center justify-between text-[10px] text-[var(--text-dim)] font-mono">
             <div className="flex items-center space-x-3 overflow-x-auto py-0.5">
               <span>Shortcuts:</span>
               <span><strong className="text-[var(--text-primary)]">[Space]</strong> Start/Pause</span>

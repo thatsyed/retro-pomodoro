@@ -38,7 +38,7 @@ export function RemindersDeck({
           </div>
 
           {/* Reminders List */}
-          <div className="flex-1 min-h-0 overflow-y-auto pr-1 space-y-1.5">
+          <div className="flex-1 min-h-0 max-h-[300px] lg:max-h-none overflow-y-auto pr-1 space-y-1.5">
             {reminders.length > 0 ? (
               reminders.map((rem) => (
                 <ReminderItem
@@ -72,7 +72,7 @@ export function RemindersDeck({
   }
 
   return (
-    <div className="retro-bezel bg-[var(--bg-deck)] p-4 flex flex-col h-full justify-between">
+    <div className="retro-bezel bg-[var(--bg-deck)] p-4 flex flex-col lg:h-full lg:justify-between">
       {/* Upper Section: Reminders Panel */}
       <div>
         <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--border-color)]">

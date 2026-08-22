@@ -32,7 +32,7 @@ export function HeaderBar({
           <button
             type="button"
             onClick={handleOpenShortcuts}
-            className="size-9 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all cursor-pointer flex items-center justify-center"
+            className="hidden lg:flex size-9 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all cursor-pointer items-center justify-center"
             title="Shortcuts [Alt + K]"
           >
             <Keyboard className="w-4 h-4" />
@@ -66,7 +66,7 @@ export function HeaderBar({
         <button
           type="button"
           onClick={handleOpenShortcuts}
-          className="p-1.5 bg-[var(--bg-app)] border border-[var(--border-color)] text-[var(--text-dim)] hover:text-[var(--text-primary)] hover:border-[var(--text-primary)] transition-all cursor-pointer"
+          className="hidden lg:flex p-1.5 bg-[var(--bg-app)] border border-[var(--border-color)] text-[var(--text-dim)] hover:text-[var(--text-primary)] hover:border-[var(--text-primary)] transition-all cursor-pointer items-center justify-center"
           title="Shortcuts [Alt + K]"
         >
           <Keyboard className="w-4 h-4" />

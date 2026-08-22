@@ -94,8 +94,8 @@ test.describe('Retro Pomodoro Workstation E2E Verification', () => {
     await page.locator('button:has-text("Start")').click();
     await expect(page.locator('button:has-text("Pause")').first()).toBeVisible();
 
-    // CRT toggle operates independently of theme (via Settings)
-    await expect(page.locator('.crt-overlay')).toBeVisible();
+    // CRT is intentionally hidden in Minimal (clean dashboard)
+    await expect(page.locator('.crt-overlay')).not.toBeVisible();
     await page.locator('button[title="Settings"]').click();
     await page.locator('button[title*="Toggle CRT scanlines"]').click();
     await page.keyboard.press('Escape');

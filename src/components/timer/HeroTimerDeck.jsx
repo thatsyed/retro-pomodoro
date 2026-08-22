@@ -24,7 +24,7 @@ export function HeroTimerDeck({
       className={
         minimal
           ? 'rounded-2xl border border-border bg-card p-5 sm:p-6 flex flex-col shadow-sm gap-4 lg:h-full'
-          : 'retro-bezel bg-[var(--bg-deck)] p-4 flex flex-col justify-between h-full'
+          : 'retro-bezel bg-[var(--bg-deck)] p-4 flex flex-col justify-between lg:h-full'
       }
     >
       {/* Top: Mode Selection */}
