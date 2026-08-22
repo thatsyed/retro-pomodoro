@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { X, Plus, Clock } from 'lucide-react';
+import { Plus, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 export function AddReminderModal({ isOpen, onClose, onAddReminder }) {
   const [title, setTitle] = useState('');
   const [intervalMinutes, setIntervalMinutes] = useState(30);
-
-  if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,45 +26,38 @@ export function AddReminderModal({ isOpen, onClose, onAddReminder }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-      <div className="retro-bezel bg-[var(--bg-deck)] p-5 max-w-md w-full relative">
-        {/* Header */}
-        <div className="flex items-center justify-between pb-2 mb-3 border-b border-[var(--border-color)]">
-          <div className="flex items-center space-x-2 text-[var(--text-primary)]">
-            <Clock className="w-4 h-4" />
-            <h3 className="font-pixel text-xs tracking-wider">New Reminder</h3>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-[var(--text-dim)] hover:text-[var(--text-primary)] cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-md gap-0 p-0">
+        <DialogHeader className="border-b border-border px-5 pt-4 pb-3.5">
+          <DialogTitle className="modal-title flex items-center gap-2.5">
+            <Clock className="w-4 h-4 shrink-0" />
+            New Reminder
+          </DialogTitle>
+          <DialogDescription className="sr-only">Create a repeating interval reminder.</DialogDescription>
+        </DialogHeader>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 p-5 font-mono text-xs">
           <div>
-            <label htmlFor="reminder-title" className="block text-[10px] font-mono text-[var(--text-dim)] mb-1">
+            <label htmlFor="reminder-title" className="block text-[10px] text-muted-foreground mb-1">
               Reminder name
             </label>
-            <input
+            <Input
               id="reminder-title"
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Drink water, Rest eyes, Stretch"
-              className="w-full bg-[var(--bg-app)] border border-[var(--border-color)] px-3 py-2 text-xs text-[var(--text-primary)] font-mono focus:outline-none focus:border-[var(--text-primary)]"
+              className="border-border bg-background text-foreground"
             />
           </div>
 
           <div>
-            <label htmlFor="reminder-interval" className="block text-[10px] font-mono text-[var(--text-dim)] mb-1">
+            <label htmlFor="reminder-interval" className="block text-[10px] text-muted-foreground mb-1">
               Repeat every (minutes): {intervalMinutes} min
             </label>
-            <input
+            <Input
               id="reminder-interval"
               type="number"
               min="1"
@@ -64,22 +65,22 @@ export function AddReminderModal({ isOpen, onClose, onAddReminder }) {
               required
               value={intervalMinutes}
               onChange={(e) => setIntervalMinutes(Math.max(1, parseInt(e.target.value, 10) || 1))}
-              className="w-full bg-[var(--bg-app)] border border-[var(--border-color)] px-3 py-2 text-xs text-[var(--text-primary)] font-mono focus:outline-none focus:border-[var(--text-primary)]"
+              className="border-border bg-background text-foreground"
             />
           </div>
 
           {/* Quick preset buttons */}
-          <div className="flex items-center space-x-1.5 text-[10px] font-mono">
-            <span className="text-[var(--text-dim)]">Presets:</span>
+          <div className="flex items-center space-x-1.5 text-[10px]">
+            <span className="text-muted-foreground">Presets:</span>
             {[15, 20, 30, 45, 60].map((m) => (
               <button
                 key={m}
                 type="button"
                 onClick={() => setIntervalMinutes(m)}
-                className={`px-2 py-0.5 border text-[9px] cursor-pointer ${
+                className={`rounded-md border px-2 py-0.5 text-[9px] tracking-wider transition-all cursor-pointer ${
                   intervalMinutes === m
-                    ? 'border-[var(--text-primary)] text-[var(--text-primary)] bg-[var(--text-primary)]/10 font-bold'
-                    : 'border-[var(--border-color)] text-[var(--text-dim)] hover:text-[var(--text-secondary)]'
+                    ? 'border-primary text-primary bg-primary/10 font-bold'
+                    : 'border-border text-muted-foreground hover:text-secondary-foreground'
                 }`}
               >
                 {m}m
@@ -88,24 +89,17 @@ export function AddReminderModal({ isOpen, onClose, onAddReminder }) {
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center justify-end space-x-2 pt-2 border-t border-[var(--border-color)]">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-3 py-1.5 bg-[var(--bg-surface)] text-[var(--text-dim)] border border-[var(--border-color)] hover:text-[var(--text-primary)] font-pixel text-[10px] cursor-pointer"
-            >
+          <DialogFooter className="gap-2 border-t border-border pt-3 sm:space-x-2">
+            <Button type="button" variant="outline" size="sm" onClick={onClose} className="font-pixel text-[10px]">
               Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-1.5 bg-[var(--text-primary)] text-[var(--bg-app)] font-pixel text-[10px] font-bold border border-[var(--text-primary)] shadow-[var(--glow-primary)] cursor-pointer hover:brightness-110 flex items-center space-x-1"
-            >
+            </Button>
+            <Button type="submit" size="sm" className="font-pixel text-[10px]">
               <Plus className="w-3 h-3 stroke-[3]" />
-              <span>Create</span>
-            </button>
-          </div>
+              Create
+            </Button>
+          </DialogFooter>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

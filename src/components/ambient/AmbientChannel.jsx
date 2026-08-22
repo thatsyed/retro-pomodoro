@@ -1,7 +1,42 @@
 import React from 'react';
 import { Play, Pause } from 'lucide-react';
 
-export function AmbientChannel({ id, label, icon: Icon, isPlaying, onTogglePlay }) {
+export function AmbientChannel({ id, label, icon: Icon, isPlaying, onTogglePlay, minimal = false }) {
+  if (minimal) {
+    return (
+      <div className="flex items-center justify-between p-2 rounded-xl border border-border bg-background/40 transition-all">
+        {/* Icon & Label */}
+        <div className="flex items-center space-x-2 truncate pr-2">
+          <Icon className={`w-3.5 h-3.5 shrink-0 ${isPlaying ? 'text-foreground' : 'text-muted-foreground'}`} />
+          <span
+            className={`text-xs font-sans truncate ${isPlaying ? 'text-foreground font-medium' : 'text-muted-foreground'}`}
+            title={label}
+          >
+            {label}
+          </span>
+        </div>
+
+        {/* Direct Play / Pause Toggle Button */}
+        <button
+          type="button"
+          onClick={() => onTogglePlay(id)}
+          className={`size-7 rounded-full transition-all cursor-pointer flex items-center justify-center ${
+            isPlaying
+              ? 'bg-primary text-primary-foreground'
+              : 'bg-secondary/60 text-muted-foreground hover:text-foreground'
+          }`}
+          title={isPlaying ? `Pause ${label}` : `Play ${label}`}
+        >
+          {isPlaying ? (
+            <Pause className="w-3 h-3 fill-current" />
+          ) : (
+            <Play className="w-3 h-3 fill-current ml-0.5" />
+          )}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center justify-between p-2 bg-[var(--bg-surface)] border border-[var(--border-color)] my-1.5 transition-all">
       {/* Icon & Label */}

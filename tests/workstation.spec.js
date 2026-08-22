@@ -67,14 +67,43 @@ test.describe('Retro Pomodoro Workstation E2E Verification', () => {
     const toggleBtn = page.getByRole('button', { name: 'Disable reminder' }).first();
     await toggleBtn.click();
 
-    // Theme selector
-    const themeSelect = page.locator('select');
-    await themeSelect.selectOption('amber');
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'amber');
+    // Open settings: toggle CRT off, then switch theme to Minimal
+    await page.locator('button[title="Settings"]').click();
+    const dialog = page.locator('[data-slot="dialog-content"]');
 
-    // CRT Toggle
-    const crtBtn = page.locator('button:has-text("CRT:")');
-    await crtBtn.click();
+    await dialog.locator('button[title*="Toggle CRT scanlines"]').click();
     await expect(page.locator('.crt-overlay')).not.toBeVisible();
+
+    await dialog.getByRole('button', { name: 'Minimal' }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'minimal');
+  });
+
+  test('applies and persists the Minimal theme with independent CRT toggle', async ({ page }) => {
+    // Switch theme via Settings
+    await page.locator('button[title="Settings"]').click();
+    const dialog = page.locator('[data-slot="dialog-content"]');
+    await dialog.getByRole('button', { name: 'Minimal' }).click();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'minimal');
+
+    // Persists across reload
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'minimal');
+
+    // Timer still works under minimal theme
+    await page.locator('button:has-text("Start")').click();
+    await expect(page.locator('button:has-text("Pause")').first()).toBeVisible();
+
+    // CRT toggle operates independently of theme (via Settings)
+    await expect(page.locator('.crt-overlay')).toBeVisible();
+    await page.locator('button[title="Settings"]').click();
+    await page.locator('button[title*="Toggle CRT scanlines"]').click();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.crt-overlay')).not.toBeVisible();
+
+    // Switching back to classic restores its palette
+    await page.locator('button[title="Settings"]').click();
+    await page.locator('[data-slot="dialog-content"]').getByRole('button', { name: 'Classic' }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'classic');
   });
 });

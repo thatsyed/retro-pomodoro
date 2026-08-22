@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
-export function TaskInput({ onAddTask }) {
+const priorityLabels = {
+  low: 'Low',
+  med: 'Med',
+  high: 'High',
+};
+
+export function TaskInput({ onAddTask, minimal = false }) {
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('med');
 
@@ -13,34 +21,76 @@ export function TaskInput({ onAddTask }) {
     }
   };
 
-  const priorityLabels = {
-    low: 'Low',
-    med: 'Med',
-    high: 'High',
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="mb-3 space-y-2">
-      <div className="flex items-center space-x-1.5">
-        <div className="relative flex-1">
-          <input
+  if (minimal) {
+    return (
+      <form onSubmit={handleSubmit} className="mb-3 space-y-2">
+        <div className="flex items-center gap-2">
+          <Input
             id="task-input"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Add a task..."
-            className="w-full bg-[var(--bg-app)] border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-dim)] font-mono focus:outline-none focus:border-[var(--text-primary)] focus:shadow-[var(--glow-primary)]"
+            className="flex-1 rounded-full border-border bg-background text-xs font-sans text-foreground h-9"
           />
+
+          <Button
+            type="submit"
+            size="icon"
+            title="Add Task"
+            className="size-9 shrink-0 rounded-full"
+          >
+            <Plus className="w-4 h-4" />
+          </Button>
         </div>
 
-        <button
+        {/* Priority Selection Bar */}
+        <div className="flex items-center justify-between text-[10px] font-sans pt-0.5">
+          <span className="text-muted-foreground">Priority:</span>
+          <div className="flex items-center gap-1 p-0.5 rounded-full bg-secondary/60">
+            {['low', 'med', 'high'].map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => setPriority(p)}
+                className={`px-2.5 py-0.5 rounded-full text-[10px] font-sans font-medium transition-all cursor-pointer ${
+                  priority === p
+                    ? p === 'high'
+                      ? 'bg-destructive/15 text-destructive'
+                      : 'bg-primary/15 text-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {priorityLabels[p]}
+              </button>
+            ))}
+          </div>
+        </div>
+      </form>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="mb-3 space-y-2">
+      <div className="flex items-center space-x-1.5">
+        <Input
+          id="task-input"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Add a task..."
+          className="h-auto flex-1 border-border bg-background px-3 py-1.5 text-xs font-mono text-foreground"
+        />
+
+        <Button
           type="submit"
-          className="bg-[var(--text-primary)] text-[var(--bg-app)] hover:bg-[var(--text-secondary)] px-3 py-1.5 font-pixel text-[10px] flex items-center justify-center transition-all cursor-pointer font-bold shrink-0"
+          size="sm"
           title="Add Task"
+          className="h-auto shrink-0 px-3 py-1.5 font-pixel text-[10px] font-bold"
         >
           <Plus className="w-3.5 h-3.5 mr-1 stroke-[3]" />
           Add
-        </button>
+        </Button>
       </div>
 
       {/* Priority Selection Bar */}

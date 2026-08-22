@@ -1,12 +1,70 @@
 import React from 'react';
 import { Bell, BellOff, RotateCcw, Trash2 } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
 
-export function ReminderItem({ reminder, onToggle, onDelete, onReset }) {
+export function ReminderItem({ reminder, onToggle, onDelete, onReset, minimal = false }) {
   const formatTime = (secs) => {
     const m = Math.floor(secs / 60);
     const s = secs % 60;
     return `${m}m ${s.toString().padStart(2, '0')}s`;
   };
+
+  if (minimal) {
+    return (
+      <div
+        className={`p-2.5 rounded-xl border border-border flex items-center justify-between transition-all duration-150 ${
+          reminder.enabled ? 'bg-background/40' : 'opacity-50'
+        }`}
+      >
+        <div className="flex items-center space-x-3 flex-1 min-w-0 pr-2">
+          {/* Active Toggle */}
+          <Switch
+            checked={reminder.enabled}
+            onCheckedChange={() => onToggle(reminder.id)}
+            title={reminder.enabled ? 'Disable reminder' : 'Enable reminder'}
+            aria-label={reminder.enabled ? 'Disable reminder' : 'Enable reminder'}
+          />
+
+          {/* Title and Countdown */}
+          <div className="flex-1 min-w-0">
+            <div className="text-xs font-sans font-medium text-foreground truncate">
+              {reminder.title}
+            </div>
+            <div className="text-[10px] font-sans text-muted-foreground flex items-center space-x-1.5 tabular-nums">
+              <span>Every {reminder.intervalMinutes}m</span>
+              {reminder.enabled && (
+                <span className="font-medium">
+                  · In {formatTime(reminder.secondsRemaining)}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center space-x-0.5 shrink-0">
+          <button
+            type="button"
+            onClick={() => onReset(reminder.id)}
+            className="text-muted-foreground hover:text-foreground p-1.5 transition-colors cursor-pointer"
+            title="Reset countdown"
+            aria-label="Reset countdown"
+          >
+            <RotateCcw className="w-3 h-3" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onDelete(reminder.id)}
+            className="text-muted-foreground hover:text-destructive p-1.5 transition-colors cursor-pointer"
+            title="Delete reminder"
+            aria-label="Delete reminder"
+          >
+            <Trash2 className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

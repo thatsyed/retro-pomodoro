@@ -1,7 +1,56 @@
 import React from 'react';
 import { Play, Pause, SkipForward, RotateCcw } from 'lucide-react';
 
-export function TimerControls({ isRunning, onToggle, onSkip, onReset }) {
+export function TimerControls({ isRunning, onToggle, onSkip, onReset, minimal = false }) {
+  if (minimal) {
+    const ring =
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card';
+
+    return (
+      <div className="flex items-center justify-center gap-3 shrink-0">
+        {/* Start / Pause Button */}
+        <button
+          type="button"
+          onClick={onToggle}
+          className={`flex-[2] h-12 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 hover:bg-primary/90 active:scale-[0.98] cursor-pointer shadow-md ${ring}`}
+          title={isRunning ? 'Pause Timer [Space]' : 'Start Timer [Space]'}
+        >
+          {isRunning ? (
+            <>
+              <Pause className="w-4 h-4 fill-current" />
+              <span>Pause</span>
+            </>
+          ) : (
+            <>
+              <Play className="w-4 h-4 fill-current" />
+              <span>Start</span>
+            </>
+          )}
+        </button>
+
+        {/* Skip Button */}
+        <button
+          type="button"
+          onClick={onSkip}
+          className={`size-12 rounded-full border border-border text-muted-foreground hover:text-foreground hover:bg-secondary/60 active:scale-[0.96] cursor-pointer flex items-center justify-center transition-all duration-200 ${ring}`}
+          title="Skip Session [Alt + S]"
+        >
+          <SkipForward className="w-4 h-4" />
+        </button>
+
+        {/* Reset Button */}
+        <button
+          type="button"
+          onClick={onReset}
+          className={`size-12 rounded-full border border-border text-muted-foreground hover:text-destructive hover:bg-destructive/10 active:scale-[0.96] cursor-pointer flex items-center justify-center transition-all duration-200 ${ring}`}
+          title="Reset Countdown [Alt + R]"
+        >
+          <RotateCcw className="w-4 h-4" />
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center justify-center space-x-3 mb-4">
       {/* Start / Pause Button */}

@@ -1,9 +1,16 @@
 import React from 'react';
-import { X, Keyboard } from 'lucide-react';
+import { Keyboard } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 export function KeyboardShortcutsModal({ isOpen, onClose }) {
-  if (!isOpen) return null;
-
   const shortcuts = [
     { key: 'Space', desc: 'Start / Pause timer' },
     { key: 'Alt + S', desc: 'Skip to next period (Focus ↔ Break)' },
@@ -17,45 +24,36 @@ export function KeyboardShortcutsModal({ isOpen, onClose }) {
   ];
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-      <div className="retro-bezel bg-[var(--bg-deck)] p-5 max-w-md w-full relative">
-        <div className="flex items-center justify-between pb-2 mb-3 border-b border-[var(--border-color)]">
-          <div className="flex items-center space-x-2 text-[var(--text-primary)]">
-            <Keyboard className="w-4 h-4" />
-            <h3 className="font-pixel text-xs tracking-wider">Keyboard Shortcuts</h3>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-[var(--text-dim)] hover:text-[var(--text-primary)] cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-md gap-0 p-0">
+        <DialogHeader className="border-b border-border px-5 pt-4 pb-3.5">
+          <DialogTitle className="modal-title flex items-center gap-2.5">
+            <Keyboard className="w-4 h-4 shrink-0" />
+            Keyboard Shortcuts
+          </DialogTitle>
+          <DialogDescription className="sr-only">List of available keyboard shortcuts.</DialogDescription>
+        </DialogHeader>
 
-        <div className="space-y-2 font-mono text-xs max-h-[300px] overflow-y-auto pr-1">
+        <div className="space-y-2 p-5 pb-0 font-mono text-xs max-h-[300px] overflow-y-auto pr-1">
           {shortcuts.map((sc) => (
-            <div key={sc.key} className="flex items-center justify-between p-1.5 bg-[var(--bg-surface)] border border-[var(--border-color)]">
-              <span className="px-2 py-0.5 bg-[var(--bg-app)] border border-[var(--text-primary)] text-[var(--text-primary)] font-bold text-[11px]">
+            <div
+              key={sc.key}
+              className="flex items-center justify-between rounded-md border border-border bg-muted/40 p-1.5"
+            >
+              <kbd className="rounded-xs border border-primary bg-background px-2 py-0.5 text-primary font-bold text-[11px]">
                 {sc.key}
-              </span>
-              <span className="text-[11px] text-[var(--text-dim)] text-right pl-2">
-                {sc.desc}
-              </span>
+              </kbd>
+              <span className="text-[11px] text-muted-foreground text-right pl-2">{sc.desc}</span>
             </div>
           ))}
         </div>
 
-        <div className="pt-3 mt-3 border-t border-[var(--border-color)] text-right">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-1.5 bg-[var(--text-primary)] text-[var(--bg-app)] font-pixel text-[10px] font-bold cursor-pointer hover:brightness-110"
-          >
+        <DialogFooter className="border-t border-border p-5 pt-3 mt-3">
+          <Button type="button" size="sm" onClick={onClose} className="font-pixel text-[10px]">
             Close [Esc]
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

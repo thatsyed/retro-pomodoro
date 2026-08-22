@@ -15,14 +15,24 @@ export function HeroTimerDeck({
   onSkip,
   onReset,
   onChangeMode,
+  theme = 'classic',
 }) {
+  const minimal = theme === 'minimal';
+
   return (
-    <div className="retro-bezel bg-[var(--bg-deck)] p-4 flex flex-col justify-between h-full">
+    <div
+      className={
+        minimal
+          ? 'rounded-2xl border border-border bg-card p-5 sm:p-6 flex flex-col shadow-sm gap-4 lg:h-full'
+          : 'retro-bezel bg-[var(--bg-deck)] p-4 flex flex-col justify-between h-full'
+      }
+    >
       {/* Top: Mode Selection */}
       <ModeTabs
         mode={mode}
         onChangeMode={onChangeMode}
         durations={durations}
+        minimal={minimal}
       />
 
       {/* Main Digital CRT Timer Screen */}
@@ -32,6 +42,7 @@ export function HeroTimerDeck({
         mode={mode}
         isRunning={isRunning}
         completedSessions={completedSessions}
+        minimal={minimal}
       />
 
       {/* Tactile Timer Buttons */}
@@ -40,10 +51,11 @@ export function HeroTimerDeck({
         onToggle={onToggle}
         onSkip={onSkip}
         onReset={onReset}
+        minimal={minimal}
       />
 
       {/* Lo-Fi Cassette Tape Deck */}
-      <CassettePlayer />
+      <CassettePlayer minimal={minimal} />
     </div>
   );
 }

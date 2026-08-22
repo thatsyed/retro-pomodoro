@@ -13,7 +13,60 @@ export function TaskDeck({
   onDeleteTask,
   onClearCompleted,
   stats,
+  theme = 'classic',
 }) {
+  const minimal = theme === 'minimal';
+
+  if (minimal) {
+    return (
+      <div className="rounded-2xl border border-border bg-card p-4 flex flex-col shadow-sm lg:h-full">
+        {/* Deck Header */}
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-border">
+          <div className="flex items-center gap-2">
+            <ListTodo className="w-4 h-4 text-muted-foreground" />
+            <h2 className="font-sans text-sm font-semibold tracking-tight text-foreground">Tasks</h2>
+          </div>
+          <span className="text-[10px] font-sans font-medium text-muted-foreground rounded-full bg-secondary/60 px-2 py-0.5">
+            {stats.active} active
+          </span>
+        </div>
+
+        {/* Input */}
+        <TaskInput onAddTask={onAddTask} minimal />
+
+        {/* Task List (Scrollable) */}
+        <div className="flex-1 min-h-[120px] overflow-y-auto space-y-1.5 pr-1">
+          {tasks.length > 0 ? (
+            tasks.map((task) => (
+              <TaskItem
+                key={task.id}
+                task={task}
+                onToggle={onToggleTask}
+                onDelete={onDeleteTask}
+                minimal
+              />
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center h-36 text-center rounded-xl border border-dashed border-border p-4">
+              <CheckCircle2 className="w-6 h-6 mb-2 text-muted-foreground/60" />
+              <span className="text-xs text-muted-foreground">No tasks here.</span>
+              <span className="text-[10px] text-muted-foreground/70 mt-1">Press Alt + T to add one.</span>
+            </div>
+          )}
+        </div>
+
+        {/* Filter and Summary Footer */}
+        <TaskFilters
+          filter={filter}
+          onFilterChange={onFilterChange}
+          stats={stats}
+          onClearCompleted={onClearCompleted}
+          minimal
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="retro-bezel bg-[var(--bg-deck)] p-4 flex flex-col h-full">
       {/* Deck Header */}
@@ -33,7 +86,7 @@ export function TaskDeck({
       <TaskInput onAddTask={onAddTask} />
 
       {/* Task List (Scrollable) */}
-      <div className="flex-1 overflow-y-auto space-y-1 pr-1 min-h-[220px] max-h-[380px]">
+      <div className="flex-1 min-h-[120px] overflow-y-auto space-y-1 pr-1">
         {tasks.length > 0 ? (
           tasks.map((task) => (
             <TaskItem

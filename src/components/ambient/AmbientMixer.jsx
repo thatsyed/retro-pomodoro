@@ -3,7 +3,7 @@ import { Radio, CloudRain, Waves, Square } from 'lucide-react';
 import { AmbientChannel } from './AmbientChannel';
 import { soundSynth } from '../../services/soundSynth';
 
-export function AmbientMixer() {
+export function AmbientMixer({ minimal = false }) {
   const [playingState, setPlayingState] = useState({
     noise: false,
     rain: false,
@@ -33,6 +33,46 @@ export function AmbientMixer() {
       rain: false,
     });
   };
+
+  if (minimal) {
+    return (
+      <div className="pt-3 border-t border-border mt-3">
+        {/* Mixer Header */}
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">
+            Ambient
+          </span>
+
+          {anyPlaying && (
+            <button
+              type="button"
+              onClick={handleStopAll}
+              className="rounded-full px-2.5 py-0.5 bg-secondary/60 text-[10px] font-sans font-medium flex items-center gap-1 cursor-pointer transition-all hover:text-destructive text-muted-foreground"
+              title="Stop all ambient sounds"
+            >
+              <Square className="w-2.5 h-2.5 fill-current" />
+              <span>Stop all</span>
+            </button>
+          )}
+        </div>
+
+        {/* 2 Channels: White noise and Rain */}
+        <div className="space-y-1.5">
+          {channels.map((ch) => (
+            <AmbientChannel
+              key={ch.id}
+              id={ch.id}
+              label={ch.label}
+              icon={ch.icon}
+              isPlaying={playingState[ch.id]}
+              onTogglePlay={handleTogglePlay}
+              minimal
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-3 border-t border-[var(--border-color)] mt-3">
