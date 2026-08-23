@@ -81,7 +81,16 @@ The digital display shows current progress as `Round X of 4` along with an activ
 
 ## Keyboard Shortcuts
 
-![Keyboard Shortcuts](https://res.cloudinary.com/j8k8qxlg/image/upload/v1787511629/ChatGPT_Image_Aug_24_2026_12_30_18_AM.png)
+| Shortcut | Action | Description |
+| :--- | :--- | :--- |
+| `Space` | **Start / Pause** | Toggle active countdown (when not typing in an input) |
+| `Alt + S` | **Skip Period** | Skip to next scheduled interval (Focus ↔ Break) |
+| `Alt + R` | **Reset Timer** | Reset the current countdown to full duration |
+| `Alt + M` | **Toggle Cassette** | Play / pause or mute / unmute music tape audio |
+| `Alt + T` | **Focus Task Input** | Jump focus directly to the task creation field |
+| `Alt + C` | **Toggle CRT Effect** | Enable or disable CRT scanlines and phosphor bloom |
+| `Alt + K` | **Keyboard Cheat-Sheet** | Open the keyboard shortcuts reference dialog |
+| `Esc` | **Close Dialogs** | Dismiss active modal windows or settings dialogs |
 
 ---
 
