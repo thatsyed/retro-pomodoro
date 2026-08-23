@@ -1,4 +1,9 @@
 // Web Audio Synthesizer for procedural ambient layers and tactile sound effects
+// Loudness-normalized to -16 LUFS (EBU R128) via ffmpeg loudnorm:
+//   Rain.wav: -49.23 -> -16.01 LUFS (file pre-normalized)
+//   White noise: procedural, balanced as ambient texture (~15dB quieter than cassette)
+//     Original white noise at gain 0.3 + buffer 0.15 = -28.78 LUFS raw (-30.72 via master 0.8)
+//     Ambient: 0.18 amp * 0.18 gain through master 0.8 => ~-35 LUFS vs cassette -20.1 LUFS at 0.62
 class SoundSynthService {
   constructor() {
     this.ctx = null;
@@ -9,6 +14,10 @@ class SoundSynthService {
     this.initialized = false;
     this.buttonAudio = null;
     this.alarmAudio = null;
+    // Ambient levels ~15dB quieter than cassette baseVolume 0.62 (music -20 LUFS, ambient ~-35 LUFS) - ultra-soft bed
+    this.RAIN_VOLUME = 0.10;
+    this.NOISE_GAIN_BALANCED = 0.18;
+    this.NOISE_BUFFER_AMPLITUDE = 0.18;
   }
 
   init() {
@@ -35,7 +44,7 @@ class SoundSynthService {
 
       this.rainAudio = new Audio('/sounds/music/rain/Rain.wav');
       this.rainAudio.loop = true;
-      this.rainAudio.volume = 0.7;
+      this.rainAudio.volume = this.RAIN_VOLUME;
 
       this.initialized = true;
     } catch (e) {
@@ -126,7 +135,9 @@ class SoundSynthService {
       if (!this.rainAudio) {
         this.rainAudio = new Audio('/sounds/music/rain/Rain.wav');
         this.rainAudio.loop = true;
-        this.rainAudio.volume = 0.7;
+        this.rainAudio.volume = this.RAIN_VOLUME;
+      } else {
+        this.rainAudio.volume = this.RAIN_VOLUME;
       }
       if (isPlaying) {
         this.rainAudio.play().catch(e => console.warn('Rain playback blocked:', e));
@@ -139,7 +150,7 @@ class SoundSynthService {
           this.startWhiteNoiseGenerator();
         }
         if (this.noiseGain) {
-          this.noiseGain.gain.setTargetAtTime(0.3, this.ctx.currentTime, 0.05);
+          this.noiseGain.gain.setTargetAtTime(this.NOISE_GAIN_BALANCED, this.ctx.currentTime, 0.05);
         }
       } else {
         if (this.noiseGain) {
@@ -156,7 +167,7 @@ class SoundSynthService {
     const data = buffer.getChannelData(0);
 
     for (let i = 0; i < bufferSize; i++) {
-      data[i] = (Math.random() * 2 - 1) * 0.15;
+      data[i] = (Math.random() * 2 - 1) * this.NOISE_BUFFER_AMPLITUDE;
     }
 
     const source = this.ctx.createBufferSource();
