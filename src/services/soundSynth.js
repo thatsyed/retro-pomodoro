@@ -15,18 +15,19 @@ class SoundSynthService {
     this.buttonAudio = null;
     this.alarmAudio = null;
     // Ambient levels ~15dB quieter than cassette baseVolume 0.62 (music -20 LUFS, ambient ~-35 LUFS) - ultra-soft bed
-    this.RAIN_VOLUME = 0.10;
-    this.NOISE_GAIN_BALANCED = 0.18;
+    this.RAIN_VOLUME = 0.1;
+    this.NOISE_GAIN_BALANCED = 0.05;
     this.NOISE_BUFFER_AMPLITUDE = 0.18;
   }
 
   init() {
     if (this.initialized) return;
     try {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      const AudioContextClass =
+        window.AudioContext || window.webkitAudioContext;
       if (!AudioContextClass) return;
       this.ctx = new AudioContextClass();
-      
+
       this.masterGain = this.ctx.createGain();
       this.masterGain.gain.setValueAtTime(0.8, this.ctx.currentTime);
       this.masterGain.connect(this.ctx.destination);
@@ -36,24 +37,24 @@ class SoundSynthService {
       this.noiseGain.connect(this.masterGain);
 
       // Preload audio elements
-      this.buttonAudio = new Audio('/sounds/buttons/sfx_sounds_button6.wav');
+      this.buttonAudio = new Audio("/sounds/buttons/sfx_sounds_button6.wav");
       this.buttonAudio.volume = 0.5;
-      
-      this.alarmAudio = new Audio('/sounds/reminders/sfx_alarm_loop6.wav');
+
+      this.alarmAudio = new Audio("/sounds/reminders/sfx_alarm_loop6.wav");
       this.alarmAudio.volume = 0.7;
 
-      this.rainAudio = new Audio('/sounds/music/rain/Rain.wav');
+      this.rainAudio = new Audio("/sounds/music/rain/Rain.wav");
       this.rainAudio.loop = true;
       this.rainAudio.volume = this.RAIN_VOLUME;
 
       this.initialized = true;
     } catch (e) {
-      console.warn('Web Audio API not supported or blocked:', e);
+      console.warn("Web Audio API not supported or blocked:", e);
     }
   }
 
   resume() {
-    if (this.ctx && this.ctx.state === 'suspended') {
+    if (this.ctx && this.ctx.state === "suspended") {
       this.ctx.resume();
     }
   }
@@ -91,17 +92,23 @@ class SoundSynthService {
     try {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = 'triangle';
+      osc.type = "triangle";
       osc.frequency.setValueAtTime(240, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(60, this.ctx.currentTime + 0.04);
+      osc.frequency.exponentialRampToValueAtTime(
+        60,
+        this.ctx.currentTime + 0.04,
+      );
       gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+      gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        this.ctx.currentTime + 0.04,
+      );
       osc.connect(gain);
       gain.connect(this.masterGain || this.ctx.destination);
       osc.start();
       osc.stop(this.ctx.currentTime + 0.04);
     } catch (e) {
-      console.warn('Click synth error:', e);
+      console.warn("Click synth error:", e);
     }
   }
 
@@ -112,7 +119,7 @@ class SoundSynthService {
       notes.forEach((freq, idx) => {
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        osc.type = 'sine';
+        osc.type = "sine";
         const startTime = this.ctx.currentTime + idx * 0.1;
         osc.frequency.setValueAtTime(freq, startTime);
         gain.gain.setValueAtTime(0, startTime);
@@ -124,33 +131,39 @@ class SoundSynthService {
         osc.stop(startTime + 0.4);
       });
     } catch (e) {
-      console.warn('Chime synth error:', e);
+      console.warn("Chime synth error:", e);
     }
   }
 
   setAmbientPlaying(layer, isPlaying) {
     this.init();
     this.resume();
-    if (layer === 'rain') {
+    if (layer === "rain") {
       if (!this.rainAudio) {
-        this.rainAudio = new Audio('/sounds/music/rain/Rain.wav');
+        this.rainAudio = new Audio("/sounds/music/rain/Rain.wav");
         this.rainAudio.loop = true;
         this.rainAudio.volume = this.RAIN_VOLUME;
       } else {
         this.rainAudio.volume = this.RAIN_VOLUME;
       }
       if (isPlaying) {
-        this.rainAudio.play().catch(e => console.warn('Rain playback blocked:', e));
+        this.rainAudio
+          .play()
+          .catch((e) => console.warn("Rain playback blocked:", e));
       } else {
         this.rainAudio.pause();
       }
-    } else if (layer === 'noise') {
+    } else if (layer === "noise") {
       if (isPlaying) {
         if (!this.noiseNode) {
           this.startWhiteNoiseGenerator();
         }
         if (this.noiseGain) {
-          this.noiseGain.gain.setTargetAtTime(this.NOISE_GAIN_BALANCED, this.ctx.currentTime, 0.05);
+          this.noiseGain.gain.setTargetAtTime(
+            this.NOISE_GAIN_BALANCED,
+            this.ctx.currentTime,
+            0.05,
+          );
         }
       } else {
         if (this.noiseGain) {

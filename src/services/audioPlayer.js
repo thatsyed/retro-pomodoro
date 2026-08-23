@@ -26,7 +26,7 @@ class AudioPlayerService {
         artist: 'Popoi',
         url: '/sounds/music/Popoi - Georgetown Cafe.mp3',
         duration: 168,
-        gain: 1.0,
+        gain: .80,
       },
       {
         id: 'vibedepot-cafe',
@@ -34,7 +34,7 @@ class AudioPlayerService {
         artist: 'VibeDepot',
         url: '/sounds/music/VibeDepot - cafe.mp3',
         duration: 120,
-        gain: 0.60,
+        gain: .60,
       }
     ];
     this.currentTrackIndex = 0;
