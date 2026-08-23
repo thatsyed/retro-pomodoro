@@ -155,3 +155,6 @@ npx playwright test --ui
 - **Audio Engine**: Web Audio API + HTML5 Audio
 - **Testing**: Playwright
 
+---
+
+Made with 🩷 by Owais
