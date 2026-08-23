@@ -81,7 +81,7 @@ The digital display shows current progress as `Round X of 4` along with an activ
 
 ## Keyboard Shortcuts
 
-![Keyboard Shortcuts]([https://res.cloudinary.com/j8k8qxlg/image/upload/v1787511629/ChatGPT_Image_Aug_24_2026_12_30_18_AM.png](https://res.cloudinary.com/j8k8qxlg/image/upload/v1787512093/ChatGPT_Image_Aug_24_2026_12_37_55_AM.png))
+![Keyboard Shortcuts](https://res.cloudinary.com/j8k8qxlg/image/upload/v1787512093/ChatGPT_Image_Aug_24_2026_12_37_55_AM.png)
 
 ---
 
